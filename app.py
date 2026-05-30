@@ -639,11 +639,5 @@ def parent_page():
 def specialist_page():
     return render_template('Specialist.html')
 
-
-from vercel_wsgi import handle
-
-app = handle(app)
-
 if __name__ == "__main__":
-    app.run()
-
+    app.run(debug=True)
