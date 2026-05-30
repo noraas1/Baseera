@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n="page_title">لوحة ولي الأمر — بصيرة</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  --teal-50:#E1F5EE;--teal-100:#9FE1CB;--teal-400:#1D9E75;
+  --teal-600:#0F6E56;--teal-800:#085041;
+  --purple-50:#EEEDFE;--purple-400:#7F77DD;
+  --purple-600:#534AB7;--purple-800:#3C3489;
+  --coral-50:#FAECE7;--coral-400:#D85A30;
+  --amber-50:#FAEEDA;--amber-400:#EF9F27;
+  --red-50:#FCEBEB;--red-400:#E24B4A;
+  --bg:#0D1117; --bg2:#111827; --bg3:#161D2C;
+  --surface:#1A2235; --surface2:#1F2A3C; --surface3:#243045;
+  --border:rgba(255,255,255,0.07); --border-md:rgba(255,255,255,0.13);
+  --border-accent:rgba(29,158,117,0.35);
+  --text:#F0EEE9; --text-2:#A0A8B8; --text-3:#606878;
+  --radius:10px; --radius-lg:14px; --radius-xl:20px; --radius-2xl:28px;
+  --font:'Tajawal',system-ui,sans-serif; --font-mono:'Space Mono',monospace;
+  --shadow:0 2px 12px rgba(0,0,0,0.3); --glow:0 0 30px rgba(29,158,117,0.15);
+  --accent:#1D9E75; --accent-dim:rgba(29,158,117,0.12);
+  --nav-bg: rgba(13,17,23,0.8);
+}
+
+body.light-mode {
+  --bg:#F8FAFC; --bg2:#F1F5F9; --bg3:#E2E8F0;
+  --surface:#FFFFFF; --surface2:#F8FAFC; --surface3:#F1F5F9;
+  --border:rgba(0,0,0,0.08); --border-md:rgba(0,0,0,0.12);
+  --border-accent:rgba(29,158,117,0.4);
+  --text:#0F172A; --text-2:#475569; --text-3:#64748B;
+  --shadow:0 8px 30px rgba(0,0,0,0.05); --glow:0 0 30px rgba(29,158,117,0.2);
+  --nav-bg:rgba(255,255,255,0.85); --accent-dim:rgba(29,158,117,0.1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;min-height:100vh;transition:background 0.4s ease,color 0.4s ease;}
+
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(29,158,117,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,158,117,0.04) 1px,transparent 1px);
+  background-size:48px 48px;pointer-events:none;z-index:0;
+}
+body::after{
+  content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;
+  background:radial-gradient(ellipse at 60% 20%,rgba(29,158,117,0.05) 0%,transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(83,74,183,0.04) 0%,transparent 50%);
+  pointer-events:none;z-index:0;animation:bgPulse 12s ease-in-out infinite alternate;
+}
+@keyframes bgPulse{from{opacity:0.6}to{opacity:1}}
+
+.page{max-width:1180px;margin:0 auto;padding:7rem 1.5rem 2rem;position:relative;z-index:1;}
+h1{font-size:26px;font-weight:800;line-height:1.2;letter-spacing:-0.5px;color:var(--text);}
+h2{font-size:19px;font-weight:700;color:var(--text);}
+h3{font-size:15px;font-weight:700;color:var(--text);}
+.subtitle{font-size:14px;color:var(--text-2);margin-top:5px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+
+/* ── Navigation ── */
+.topnav{
+  background:var(--nav-bg);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);padding:0 1.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  height:64px;position:fixed;top:0;width:100%;z-index:100;
+  animation:slideDownNav 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+@keyframes slideDownNav{from{transform:translateY(-100%);}to{transform:translateY(0);}}
+
+.nav-left-group{display:flex;align-items:center;gap:2rem;}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-brand img{height:110px;width:auto;border-radius:8px; transition: all 0.3s;}
+/* حل مشكلة اللوقو في الدارك مود */
+body:not(.light-mode) .nav-brand img {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+}
+
+.nav-brand-text{font-weight:900;font-size:18px;color:var(--text);letter-spacing:-0.5px;}
+.nav-links{display:flex;gap:8px;}
+.nav-links a{padding:8px 16px;border-radius:var(--radius);font-size:14px;color:var(--text-2);text-decoration:none;font-weight:700;transition:all .2s;background:transparent;}
+.nav-links a:hover{background:rgba(128,128,128,0.1);color:var(--text);}
+.nav-links a.active{background:var(--accent-dim);color:var(--teal-400);}
+.nav-right-group{display:flex;align-items:center;gap:1.2rem;}
+/* استبدلي كلاس .nav-tools بهذا الكود */
+.nav-tools{display:flex;align-items:center;gap:8px;padding-inline-start:1.2rem;border-inline-start:1px solid var(--border-md);}
+.icon-btn{width:36px;height:36px;border-radius:50%;background:transparent;border:1px solid transparent;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--text-2);transition:all .2s;}
+.icon-btn:hover{background:rgba(128,128,128,0.1);color:var(--text);border-color:var(--border-md);}
+.lang-text{font-size:12px;font-weight:700;font-family:var(--font);}
+.nav-user-area{display:flex;align-items:center;gap:12px;}
+.nav-user-info{display:flex;flex-direction:column;justify-content:center;align-items:flex-end;}
+.nav-user-name{font-size:13px;color:var(--text);font-weight:800;line-height:1.2;}
+.nav-user-role{font-size:11px;color:var(--text-3);font-weight:600;}
+.avatar{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;border:1px solid var(--border-accent);}
+.av-teal{background:var(--accent-dim);color:var(--teal-400);}
+.btn-logout{padding:6px 12px;font-size:12px;font-weight:700;border-radius:var(--radius);background:rgba(162,45,45,0.1);color:var(--red-400);border:1px solid rgba(162,45,45,0.2);cursor:pointer;transition:all .2s;}
+.btn-logout:hover{background:rgba(162,45,45,0.2);}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 20px;border-radius:var(--radius);font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .2s;text-decoration:none;white-space:nowrap;}
+.btn:active{transform:scale(0.97)}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 16px rgba(29,158,117,0.3);}
+.btn-primary:hover{background:var(--teal-800);box-shadow:0 6px 20px rgba(29,158,117,0.4)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border-md);}
+.btn-outline:hover{background:var(--accent-dim);border-color:var(--border-accent)}
+.btn-ghost{background:transparent;color:var(--text-2);border:none;padding:7px 13px}
+.btn-ghost:hover{background:rgba(128,128,128,0.1);color:var(--text)}
+.btn-sm{padding:6px 14px;font-size:13px}
+.btn-lg{padding:14px 30px;font-size:15px;border-radius:var(--radius-lg)}
+.btn-full{width:100%;}
+.btn-teal-soft{background:var(--accent-dim);color:var(--teal-400);border:0.5px solid rgba(29,158,117,0.25);}
+.btn-teal-soft:hover{background:rgba(29,158,117,0.2)}
+
+/* ── Forms ── */
+/* ── Forms ── */
+.form-group{margin-bottom:1rem;text-align:start;}
+input,select{width:100%;padding:12px 16px;border:1px solid var(--border-md);border-radius:var(--radius);font-family:var(--font);font-size:14px;color:var(--text);background:var(--surface2);outline:none;transition:all .2s;}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(29,158,117,0.15)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* ── Metrics & Tables ── */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;text-align:center;transition:all .2s;position:relative;overflow:hidden;box-shadow:var(--shadow);}
+.metric:hover{border-color:var(--border-md);transform:translateY(-2px)}
+.metric-val{font-size:32px;font-weight:900;line-height:1;font-family:var(--font-mono)}
+.metric-lbl{font-size:12px;color:var(--text-3);margin-top:8px;font-weight:700}
+.metric.teal .metric-val{color:var(--teal-400)}.metric.teal{border-color:rgba(29,158,117,0.2)}
+.metric.purple .metric-val{color:var(--purple-400)}.metric.purple{border-color:rgba(127,119,221,0.2)}
+.metric.coral .metric-val{color:var(--coral-400)}.metric.coral{border-color:rgba(216,90,48,0.2)}
+
+.table-wrap{overflow-x:auto;border-radius:var(--radius-lg);border:0.5px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+
+th {
+  text-align: start !important;
+  padding: 14px 16px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-3);
+  background: rgba(128, 128, 128, 0.03);
+  border-bottom: 0.5px solid var(--border);
+  white-space: nowrap;
+}
+
+td {
+  text-align: start !important;
+  padding: 14px 16px;
+  border-bottom: 0.5px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+tr:hover td{background:rgba(128,128,128,0.02)}
+.td-name{font-weight:700;color:var(--text)}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:100px;font-size:12px;font-weight:700;white-space:nowrap;font-family:var(--font-mono);}
+.badge-teal{background:var(--accent-dim);color:var(--teal-400);border:0.5px solid rgba(29,158,117,0.3)}
+.badge-amber{background:rgba(239,159,39,0.15);color:var(--amber-400);border:0.5px solid rgba(239,159,39,0.3)}
+.badge-red{background:rgba(162,45,45,0.15);color:var(--red-400);border:0.5px solid rgba(162,45,45,0.3)}
+
+/* ── Wizard Cards ── */
+.info-card,.question-card,.result-card{
+  background:var(--surface);border:1px solid var(--border-md);
+  border-radius:var(--radius-2xl);padding:2.5rem;
+  box-shadow:var(--shadow),var(--glow);max-width:600px;margin:0 auto;
+}
+.steps{display:flex;align-items:center;gap:8px;margin-bottom:1.5rem;justify-content:center;}
+.step-dot{width:32px;height:32px;border-radius:50%;border:2px solid var(--border-md);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--text-3);transition:all .3s;font-family:var(--font-mono);}
+.step-dot.done{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 12px rgba(29,158,117,0.4)}
+.step-dot.active{background:var(--surface3);border-color:var(--accent);color:var(--teal-400)}
+.step-line{flex:1;height:2px;background:var(--border-md);border-radius:2px;min-width:20px;max-width:40px;}
+.step-line.done{background:var(--accent)}
+
+.nav-divider {
+  width: 1px;
+  height: 35px; 
+  background: var(--border-md);
+  margin: 0 1.5rem; /* مسافة يمين ويسار الخط */
+}
+
+.q-header{margin-bottom:1.5rem}
+.q-num{font-size:13px;font-weight:800;color:var(--text-3);margin-bottom:10px;font-family:var(--font-mono)}
+.q-text{font-size:20px;font-weight:800;color:var(--text);line-height:1.5}
+.progress-wrap{background:var(--surface3);border-radius:100px;height:6px;overflow:hidden;margin-bottom:1.5rem}
+.progress-bar{height:100%;background:var(--accent);border-radius:100px;transition:width .4s ease;box-shadow:0 0 10px rgba(29,158,117,0.5)}
+
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:2rem 0}
+.opt{padding:20px 10px;border:1px solid var(--border-md);border-radius:var(--radius-lg);background:var(--surface2);cursor:pointer;font-family:var(--font);text-align:center;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.opt:hover{border-color:var(--accent);background:var(--accent-dim);transform:translateY(-2px);}
+.opt.selected{border-color:var(--accent);background:var(--accent);border-width:2px;}
+.opt .oi{font-size:32px}
+.opt .ol{font-size:15px;font-weight:800;color:var(--text)}
+.opt .os{font-size:12px;color:var(--text-3)}
+.opt.selected .ol,.opt.selected .os{color:#fff;}
+.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}
+
+/* ── Results ── */
+.result-icon-wrap{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;font-family:var(--font-mono);margin:0 auto 1.5rem;transition:all .3s;}
+.result-icon-wrap.risk{background:rgba(162,45,45,0.15);color:var(--red-400);border:2px solid rgba(162,45,45,0.4);box-shadow:0 0 30px rgba(162,45,45,0.2);}
+.result-icon-wrap.medium{background:rgba(239,159,39,0.15);color:var(--amber-400);border:2px solid rgba(239,159,39,0.4);box-shadow:0 0 30px rgba(239,159,39,0.2);}
+.result-icon-wrap.safe{background:var(--accent-dim);color:var(--teal-400);border:2px solid var(--border-accent);box-shadow:var(--glow);}
+.result-title{font-size:24px;font-weight:900;margin-bottom:8px;color:var(--text);}
+.result-sub{font-size:15px;color:var(--text-2)}
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:2rem 0}
+.rs-card{background:var(--surface2);border:1px solid var(--border-md);border-radius:var(--radius);padding:14px;text-align:center}
+.rs-val{font-size:24px;font-weight:900;color:var(--text);font-family:var(--font-mono)}
+.rs-lbl{font-size:12px;color:var(--text-3);margin-top:6px;font-weight:700;}
+.disclaimer{background:rgba(239,159,39,0.08);border-right:3px solid var(--amber-400);border-radius:0 var(--radius) var(--radius) 0;padding:14px 18px;font-size:13px;color:var(--amber-400);font-weight:700;margin:1.5rem 0;}
+.sep{height:1px;background:var(--border-md);margin:1.5rem 0}
+
+/* ── Doctors Grid ── */
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin:1rem 0}
+.doc-card{border:1px solid var(--border-md);border-radius:var(--radius-lg);padding:1.25rem;cursor:pointer;transition:all .2s;background:var(--surface2);text-align:center;}
+.doc-card:hover{border-color:var(--accent);background:var(--accent-dim);transform:translateY(-2px);}
+.doc-card.sel{border-color:var(--accent);background:var(--accent-dim);border-width:2px}
+.doc-name{font-weight:800;font-size:15px;color:var(--text);}
+.doc-spec{font-size:13px;color:var(--text-3);margin-top:4px}
+.doc-check{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;display:none;align-items:center;justify-content:center;margin:10px auto 0;}
+.doc-card.sel .doc-check{display:flex}
+
+/* ── Spinner ── */
+.spinner{width:48px;height:48px;border:4px solid var(--border-md);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1.5rem;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Modal & Toast ── */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:1;transition:opacity .3s;}
+.modal-overlay.hidden{opacity:0;pointer-events:none}
+.modal-content{background:var(--surface);padding:2.5rem;border-radius:var(--radius-2xl);width:90%;max-width:500px;box-shadow:0 20px 60px rgba(0,0,0,0.3),var(--glow);border:1px solid var(--border-md);transform:translateY(0);transition:transform .3s;}
+.modal-overlay.hidden .modal-content{transform:translateY(30px)}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface3);color:var(--text);padding:14px 28px;border-radius:100px;font-size:14px;font-weight:800;opacity:0;transition:all .3s;z-index:400;box-shadow:var(--shadow);border:1px solid var(--border-md);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.empty{text-align:center;padding:3rem;color:var(--text-3)}
+.empty-icon{font-size:40px;margin-bottom:.75rem;opacity:0.5}
+
+/* ── Animations ── */
+.hidden{display:none !important;}
+.animate-fade-in{animation:fadeInUp 0.5s cubic-bezier(0.16,1,0.3,1) forwards;}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+
+@media(max-width:760px){
+  .grid-3{grid-template-columns:1fr}
+  .opts{grid-template-columns:1fr}
+  .result-stats{grid-template-columns:1fr}
+  .nav-user-info,.btn-logout{display:none}
+  .nav-tools{border-left:none;padding-left:0}
+  .nav-links{display:none}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-left-group">
+    <a href="index.html" class="nav-brand">
+      <img src="logo.png" alt="بصيرة" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <span class="nav-brand-text" style="display:none">بصيرة</span>
+    </a>
+    
+    <div class="nav-divider"></div>
+    
+    <div class="nav-user-area">
+      <div class="avatar av-teal" id="pAvatar">أ</div>
+      <div class="nav-user-info">
+        <span class="nav-user-name" id="pName">ولي الأمر</span>
+        <span class="nav-user-role" data-i18n="role_parent">ولي الأمر</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-right-group">
+    <div class="nav-tools">
+      <button class="icon-btn" id="themeToggleBtn" title="تغيير المظهر">
+        <span id="themeIcon">🌓</span>
+      </button>
+      <button class="icon-btn" id="langToggleBtn" title="تغيير اللغة">
+        <span class="lang-text" id="langToggleText">EN</span>
+      </button>
+    </div>
+    <button class="btn-logout" onclick="logout()" data-i18n="logout_btn">خروج</button>
+  </div>
+</nav>
+
+<div id="view-dashboard" class="page animate-fade-in">
+  <div style="margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <h1 id="welcomeMsg">مرحباً 👋</h1>
+      <p class="subtitle" data-i18n="dashboard_subtitle">سجلات أطفالك ونتائج الفحوصات</p>
+    </div>
+    <button class="btn btn-primary" onclick="showView('assessment')" data-i18n="new_screening_btn">+ فحص جديد</button>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:2rem">
+    <div class="metric teal"><div class="metric-val" id="dTotal">0</div><div class="metric-lbl" data-i18n="metric_total">إجمالي الفحوصات</div></div>
+    <div class="metric coral"><div class="metric-val" id="dRisk">0</div><div class="metric-lbl" data-i18n="metric_risk_cases">حالات خطر</div></div>
+    <div class="metric purple" id="latestRiskCard">
+  <div class="metric-val" id="dLatestRisk" style="font-size: 26px; margin-bottom: 4px;">—</div>
+  <div class="metric-lbl" data-i18n="metric_latest_risk">آخر مستوى خطر</div>
+  <div id="dLatestDate" style="font-size: 12px; color: var(--text-3); font-family: var(--font-mono); margin-top: 8px;">—</div>
+</div>
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--border-md);border-radius:var(--radius-xl);padding:2rem;box-shadow:var(--shadow),var(--glow);">
+    <div class="section-header">
+      <h2 data-i18n="children_history_title">سجل الأطفال</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th data-i18n="th_child_name">اسم الطفل</th>
+            <th data-i18n="th_age">العمر</th>
+            <th data-i18n="th_gender">الجنس</th>
+            <th data-i18n="th_risk_level">مستوى الخطر</th>
+            <th data-i18n="th_assigned_doctor">الطبيب المعين</th>
+            <th data-i18n="th_date">تاريخ الفحص</th>
+            <th data-i18n="th_new_screening">عرض التقرير</th>
+          </tr>
+        </thead>
+        <tbody id="childrenBody">
+          <tr><td colspan="7"><div class="empty"><div class="empty-icon">👶</div><span data-i18n="no_screenings">لا توجد فحوصات بعد</span></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="view-assessment" class="page hidden">
+  <div style="margin-bottom:2rem;max-width:600px;margin-left:auto;margin-right:auto">
+    <button class="btn btn-ghost btn-sm" onclick="showView('dashboard')" style="margin-bottom:1rem" data-i18n="back_btn">← رجوع</button>
+    <div class="steps">
+      <div class="step-dot active" id="sd1">1</div><div class="step-line" id="sl1"></div>
+      <div class="step-dot" id="sd2">2</div><div class="step-line" id="sl2"></div>
+      <div class="step-dot" id="sd3">3</div><div class="step-line" id="sl3"></div>
+      <div class="step-dot" id="sd4">4</div>
+    </div>
+  </div>
+
+  <div id="step1" class="info-card animate-fade-in">
+    <h2 style="margin-bottom:1.5rem;text-align:center;" data-i18n="child_info_title">معلومات الطفل</h2>
+    <div class="form-row">
+      <div class="form-group"><label data-i18n="child_name_label">اسم الطفل *</label><input type="text" id="childName" placeholder="اسم الطفل"></div>
+      <div class="form-group"><label data-i18n="child_age_label">العمر (بالأشهر) *</label><input type="number" id="childAge" placeholder="24" min="1" max="60"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label data-i18n="gender_label">الجنس</label><select id="childGender"><option value="male" data-i18n="gender_male">ذكر</option><option value="female" data-i18n="gender_female">أنثى</option></select></div>
+      <div class="form-group"><label data-i18n="jaundice_label">يرقان عند الولادة؟</label><select id="jaundice"><option value="no" data-i18n="no">لا</option><option value="yes" data-i18n="yes">نعم</option></select></div>
+    </div>
+    <div class="form-group"><label data-i18n="family_asd_label">هل يوجد في العائلة مصاب بالتوحد؟</label><select id="familyASD"><option value="no" data-i18n="no">لا</option><option value="yes" data-i18n="yes">نعم</option></select></div>
+    <button class="btn btn-primary btn-full btn-lg" onclick="goToQuestions()" style="margin-top:1rem" data-i18n="start_questions_btn">ابدأ الأسئلة ←</button>
+  </div>
+
+  <div id="step2" class="question-card hidden animate-fade-in">
+    <div class="q-header">
+      <div class="q-num" id="qNum">السؤال 1 من 10</div>
+      <div class="progress-wrap"><div class="progress-bar" id="qProgress" style="width:10%"></div></div>
+      <div class="q-text" id="qText"></div>
+    </div>
+    <div class="opts" id="optsGrid"></div>
+    <div class="q-nav">
+      <button class="btn btn-outline btn-sm" id="prevBtn" onclick="prevQ()" style="display:none" data-i18n="prev_btn">← السابق</button>
+      <span style="font-size:13px;color:var(--text-3);font-family:var(--font-mono);font-weight:700" id="qCounter"></span>
+      <button class="btn btn-primary btn-sm" id="nextBtn" onclick="nextQ()" disabled data-i18n="next_btn">التالي ←</button>
+    </div>
+  </div>
+
+  <div id="step3" class="hidden animate-fade-in" style="max-width:560px;margin:0 auto;text-align:center;padding:5rem 2rem">
+    <div class="spinner"></div>
+    <h2 style="margin-bottom:1rem;font-size:24px;" data-i18n="analyzing_title">جاري التحليل...</h2>
+    <p class="subtitle" data-i18n="analyzing_subtitle">النموذج يحلل إجاباتك — ثوانٍ فقط</p>
+  </div>
+
+  <div id="step4" class="hidden animate-fade-in">
+    <div class="result-card">
+      <div class="result-icon-wrap" id="rIcon"></div>
+      <h2 class="result-title" id="rTitle"></h2>
+      <p class="result-sub" id="rSub"></p>
+
+      <div class="result-stats">
+        <div class="rs-card"><div class="rs-val" id="rScore">—</div><div class="rs-lbl" data-i18n="score_label">المجموع / 10</div></div>
+        <div class="rs-card"><div class="rs-val" id="rConf">—</div><div class="rs-lbl" data-i18n="confidence_label">ثقة الموديل</div></div>
+        <div class="rs-card"><div class="rs-val" id="rLevel">—</div><div class="rs-lbl" data-i18n="risk_level_label">مستوى الخطر</div></div>
+      </div>
+
+      <div class="disclaimer" data-i18n="disclaimer_text">⚕ هذا النظام أداة دعم للتصنيف المبكر فقط وليس تشخيصًا طبيًا.</div>
+
+        <div id="doctorSection" class="hidden" style="text-align:start;margin-top:2rem">        <div class="sep"></div>
+        <h3 style="margin-bottom:1.5rem;text-align:center;" data-i18n="choose_doctor_title">اختر طبيبًا مختصًا 👨‍⚕️</h3>
+        <div class="doc-grid" id="doctorGrid"></div>
+        <button class="btn btn-primary btn-full btn-lg" id="assignBtn" onclick="assignDoctor()" disabled style="margin-top:1.5rem" data-i18n="confirm_doctor_btn">تأكيد الاختيار</button>
+      </div>
+
+      <div class="sep"></div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-outline" onclick="resetAssessment()" data-i18n="new_screening_btn_again">فحص آخر</button>
+        <button class="btn btn-primary" onclick="showView('dashboard')" data-i18n="back_to_dashboard_btn">العودة للوحة</button>
+        <button class="btn btn-outline" id="downloadPDFBtn" onclick="showReportPDF(currentScreeningId)" data-i18n="download_pdf">📄 PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="doctorModal" class="modal-overlay hidden">
+  <div class="modal-content">
+    <h3 style="text-align:center;font-size:20px;margin-bottom:1.5rem;">اختر طبيباً مختصاً 👨‍⚕️</h3>
+    <div class="doc-grid" id="modalDoctorGrid"></div>
+    <div style="margin-top:2rem;display:flex;gap:12px;justify-content:center">
+      <button class="btn btn-ghost" onclick="closeDoctorModal()">إلغاء</button>
+      <button class="btn btn-primary" id="modalAssignBtn" onclick="confirmQuickAssign()" disabled>تأكيد التعيين</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// ── Dark / Light Mode
+// ══════════════════════════════════════════════════════
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+const themeIcon = document.getElementById('themeIcon');
+
+function applyTheme(isLight) {
+  document.body.classList.toggle('light-mode', isLight);
+  themeIcon.textContent = isLight ? '🌙' : '☀️';
+}
+applyTheme(localStorage.getItem('numu_theme') === 'light');
+themeToggleBtn.addEventListener('click', () => {
+  const willBeLight = !document.body.classList.contains('light-mode');
+  localStorage.setItem('numu_theme', willBeLight ? 'light' : 'dark');
+  applyTheme(willBeLight);
+});
+
+// ══════════════════════════════════════════════════════
+// ── Constants
+// ══════════════════════════════════════════════════════
+const API_BASE = 'http://127.0.0.1:5000';
+
+const QUESTIONS = [
+  { text: { ar: "هل يلتفت طفلك إليك عندما تناديه باسمه؟", en: "Does your child look at you when you call his/her name?" } },
+  { text: { ar: "ما مدى سهولة التواصل البصري مع طفلك؟", en: "How easy is it for you to get eye contact with your child?" } },
+  { text: { ar: "هل يشير طفلك للإشارة إلى شيء يريده؟ (مثل لعبة بعيدة عنه)", en: "Does your child point to indicate that s/he wants something? (e.g. a toy out of reach)" } },
+  { text: { ar: "هل يشير طفلك لمشاركتك اهتمامه؟ (مثل الإشارة لمنظر مثير)", en: "Does your child point to share interest with you? (e.g. pointing at an interesting sight)" } },
+  { text: { ar: "هل يتظاهر طفلك باللعب؟ (مثل الاعتناء بالدمى أو التحدث بهاتف لعبة)", en: "Does your child pretend? (e.g. care for dolls, talk on a toy phone)" } },
+  { text: { ar: "هل يتابع طفلك اتجاه نظرتك؟", en: "Does your child follow where you're looking?" } },
+  { text: { ar: "إذا كان أحد أفراد العائلة منزعجًا، هل يُظهر طفلك رغبة في تهدئته؟ (مثل التربيت أو الحضن)", en: "If someone in the family is upset, does your child show signs of wanting to comfort them? (e.g. stroking hair, hugging)" } },
+  { text: { ar: "كيف تصف أولى كلمات طفلك؟", en: "Would you describe your child's first words as:" } },
+  { text: { ar: "هل يستخدم طفلك إيماءات بسيطة؟ (مثل التلويح للوداع)", en: "Does your child use simple gestures? (e.g. wave goodbye)" } },
+  { text: { ar: "هل يحدق طفلك في الفراغ بدون سبب واضح؟", en: "Does your child stare at nothing with no apparent purpose?" } },
+];
+
+const OPTS = [
+  { icon: '✅', label: { ar: 'دائمًا',  en: 'Always'    }, val: 'Always'    },
+  { icon: '🔄', label: { ar: 'أحيانًا', en: 'Sometimes' }, val: 'Sometimes' },
+  { icon: '❌', label: { ar: 'أبدًا',   en: 'Never'     }, val: 'Never'     },
+];
+
+// ══════════════════════════════════════════════════════
+// ── State
+// ══════════════════════════════════════════════════════
+let currentLang        = 'ar';
+let currentQ           = 0;
+let answers            = new Array(10).fill(null);
+let childInfo          = {};
+let resultData         = {};
+let childrenHistory    = [];
+let selectedDoctorId   = null;
+let currentScreeningId = null;
+
+// ══════════════════════════════════════════════════════
+// ── Translations
+// ══════════════════════════════════════════════════════
+const T = {
+  ar: {
+    metric_latest_risk: "آخر مستوى خطر",
+    page_title:"لوحة ولي الأمر — بصيرة",brand:"بصيرة",
+    nav_dashboard:"لوحتي",nav_assessment:"فحص جديد",logout_btn:"خروج",
+    role_parent:"ولي الأمر",
+    dashboard_subtitle:"سجلات أطفالك ونتائج الفحوصات",new_screening_btn:"+ فحص جديد",
+    metric_total:"إجمالي الفحوصات",metric_risk_cases:"حالات خطر",metric_assigned_doctors:"أطباء معينون",
+    children_history_title:"سجل الأطفال",
+    th_child_name:"اسم الطفل",th_age:"العمر",th_gender:"الجنس",th_risk_level:"مستوى الخطر",
+    th_result:"التصنيف",th_confidence:"الثقة",th_assigned_doctor:"الطبيب المعين",
+    th_date:"تاريخ الفحص",th_new_screening:"عرض التقرير",
+    no_screenings:"لا توجد فحوصات بعد — ابدأ فحصًا جديدًا",
+    back_btn:"← رجوع",child_info_title:"معلومات الطفل",
+    child_name_label:"اسم الطفل *",child_age_label:"العمر (بالأشهر) *",
+    gender_label:"الجنس",gender_male:"ذكر",gender_female:"أنثى",
+    jaundice_label:"يرقان عند الولادة؟",yes:"نعم",no:"لا",
+    family_asd_label:"هل يوجد في العائلة مصاب بالتوحد؟",
+    start_questions_btn:"ابدأ الأسئلة ←",
+    question_prefix:"السؤال {c} من {t}",prev_btn:"← السابق",next_btn:"التالي ←",
+    analyzing_title:"جاري التحليل...",analyzing_subtitle:"النموذج يحلل إجاباتك — ثوانٍ فقط",
+    score_label:"المجموع / 10",confidence_label:"ثقة الموديل",risk_level_label:"مستوى الخطر",
+    disclaimer_text:"⚕ هذا النظام أداة دعم للتصنيف المبكر فقط وليس تشخيصًا طبيًا.",
+    choose_doctor_title:"اختر طبيبًا مختصًا 👨‍⚕️",confirm_doctor_btn:"تأكيد الاختيار",
+    new_screening_btn_again:"فحص آخر",back_to_dashboard_btn:"العودة للوحة",download_pdf:"📄 PDF",
+    risk_high:"عالي",risk_medium:"متوسط",risk_low:"منخفض",
+    result_at_risk:"خطر",result_safe:"آمن",male:"ذكر",female:"أنثى",
+    answers_counter:"{count} / 10 تم",
+    result_high_title:"يُنصح بمراجعة متخصص فورًا",
+    result_medium_title:"يُنصح بالمتابعة مع متخصص",
+    result_safe_title:"لا توجد مؤشرات خطر حالية",
+    result_high_sub:"أظهرت النتائج بعض المؤشرات التي تستدعي المتابعة الطبية",
+    result_safe_sub:"استمر في متابعة تطور طفلك بصورة طبيعية",
+    assign_success:"✓ تم تعيين {doctor}",
+    age_unit:"شهر",
+    toast_fill_info:"أدخل اسم الطفل والعمر",
+    toast_age_range:"العمر يجب أن يكون بين 1-60 شهرًا",
+    not_assigned:"—",loading:"جاري التحميل...",doc_available:"● متاح"
+  },
+  en: {
+    metric_latest_risk: "Latest Risk Score",
+    page_title:"Parent Dashboard — Baseera",brand:"Baseera",
+    nav_dashboard:"Dashboard",nav_assessment:"New Screening",logout_btn:"Logout",
+    role_parent:"Parent",
+    dashboard_subtitle:"Your children's records and screening results",new_screening_btn:"+ New Screening",
+    metric_total:"Total Screenings",metric_risk_cases:"Risk Cases",metric_assigned_doctors:"Assigned Doctors",
+    children_history_title:"Children History",
+    th_child_name:"Child Name",th_age:"Age",th_gender:"Gender",th_risk_level:"Risk Level",
+    th_result:"Result",th_confidence:"Confidence",th_assigned_doctor:"Assigned Doctor",
+    th_date:"Date",th_new_screening:"View Report",
+    no_screenings:"No screenings yet — start a new one",
+    back_btn:"← Back",child_info_title:"Child Information",
+    child_name_label:"Child Name *",child_age_label:"Age (months) *",
+    gender_label:"Gender",gender_male:"Male",gender_female:"Female",
+    jaundice_label:"Jaundice at birth?",yes:"Yes",no:"No",
+    family_asd_label:"Family history of autism?",
+    start_questions_btn:"Start Questions ←",
+    question_prefix:"Question {c} of {t}",prev_btn:"← Previous",next_btn:"Next →",
+    analyzing_title:"Analyzing...",analyzing_subtitle:"The model is analyzing your answers",
+    score_label:"Score / 10",confidence_label:"Model Confidence",risk_level_label:"Risk Level",
+    disclaimer_text:"⚕ This system is a support tool for early classification only, not a medical diagnosis.",
+    choose_doctor_title:"Choose a specialist doctor 👨‍⚕️",confirm_doctor_btn:"Confirm Selection",
+    new_screening_btn_again:"New Screening",back_to_dashboard_btn:"Back to Dashboard",download_pdf:"📄 PDF",
+    risk_high:"High",risk_medium:"Medium",risk_low:"Low",
+    result_at_risk:"At Risk",result_safe:"Safe",male:"Male",female:"Female",
+    answers_counter:"{count} / 10 answered",
+    result_high_title:"Recommended to consult a specialist immediately",
+    result_medium_title:"Recommended follow-up with a specialist",
+    result_safe_title:"No risk indicators at this time",
+    result_high_sub:"The results show indicators that require medical follow-up",
+    result_safe_sub:"Continue monitoring your child's development normally",
+    assign_success:"✓ Assigned {doctor}",
+    age_unit:"months",
+    toast_fill_info:"Please enter child's name and age",
+    toast_age_range:"Age must be between 1-60 months",
+    not_assigned:"—",loading:"Loading...",doc_available:"● Available"
+  }
+};
+
+const DOCTORS_STATIC = [
+  { id: 'd1', name: { ar: 'د. سارة العمري',    en: 'Dr. Sarah Al-Omari'    }, spec: { ar: 'طب الأعصاب',         en: 'Neurology'            } },
+  { id: 'd2', name: { ar: 'د. خالد الزهراني',  en: 'Dr. Khalid Al-Zahrani' }, spec: { ar: 'علم النفس السريري', en: 'Clinical Psychology'  } },
+  { id: 'd3', name: { ar: 'د. نورة الحربي',    en: 'Dr. Noura Al-Harbi'    }, spec: { ar: 'التوحد والتطور',    en: 'Autism & Development' } },
+];
+let doctorsList = [...DOCTORS_STATIC];
+
+// ══════════════════════════════════════════════════════
+// ── LocalStorage Helpers
+// ══════════════════════════════════════════════════════
+function historyKey() {
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  return `history_${user.email || 'guest'}`;
+}
+function saveHistoryLocal() { localStorage.setItem(historyKey(), JSON.stringify(childrenHistory)); }
+function loadHistoryLocal() {
+  try { const s = localStorage.getItem(historyKey()); if (s) childrenHistory = JSON.parse(s); }
+  catch(e) { childrenHistory = []; }
+}
+
+// ══════════════════════════════════════════════════════
+// ── Load History from DB (merge with local)
+// ══════════════════════════════════════════════════════
+async function loadHistoryFromDB() {
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  if (!user.email) return;
+  try {
+    const res = await fetch(`${API_BASE}/api/history/${encodeURIComponent(user.email)}`);
+    if (!res.ok) return;
+    const screenings = await res.json();
+    if (!Array.isArray(screenings)) return;
+
+    const dbHistory = screenings.map(s => {
+      let pred = {};
+      if (Array.isArray(s.predictions) && s.predictions.length) pred = s.predictions[0];
+      else if (s.predictions && typeof s.predictions === 'object') pred = s.predictions;
+
+      let docName = '—';
+      if (s.assigned_doctor_id) {
+        const foundDoc = doctorsList.find(d => String(d.id) === String(s.assigned_doctor_id));
+        if (foundDoc) docName = foundDoc.name[currentLang] || foundDoc.name.ar;
+      } else if (s.assigned_doctor_name) {
+        docName = s.assigned_doctor_name;
+      }
+
+      return {
+        id: s.id,
+        child: s.child_name,
+        age: s.child_age_months,
+        gender: s.child_gender,
+        result: pred.result || 'not_at_risk',
+        risk: pred.risk_level || 'low',
+        conf: pred.confidence || 0.9,
+        doctor: docName,
+        date: s.created_at ? s.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
+        fromDB: true
+      };
+    });
+
+    const dbIds = new Set(dbHistory.map(h => h.id).filter(Boolean));
+    const localOnly = childrenHistory.filter(h => !h.fromDB && !dbIds.has(h.id));
+    childrenHistory = [...dbHistory, ...localOnly];
+    saveHistoryLocal();
+    renderDashboard();
+  } catch(err) { console.warn(err); }
+}
+
+async function loadDoctors() {
+  try {
+    const res = await fetch(`${API_BASE}/api/doctors`);
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length) {
+        doctorsList = data.map(d => ({
+          id: d.id,
+          name: { ar: d.name, en: d.name },
+          spec: { ar: d.specialty || '—', en: d.specialty || '—' }
+        }));
+      }
+    }
+  } catch(e) {}
+}
+
+// ══════════════════════════════════════════════════════
+// ── Init
+// ══════════════════════════════════════════════════════
+window.onload = async () => {
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  if (!user.email || user.role !== 'parent') { window.location.href = 'index.html'; return; }
+  document.getElementById('pName').textContent = user.name || 'ولي الأمر';
+  document.getElementById('pAvatar').textContent = (user.name || 'أ')[0];
+  const savedLang = localStorage.getItem('preferred_lang') || 'ar';
+  setLanguage(savedLang);
+  document.getElementById('langToggleBtn').addEventListener('click', toggleLanguage);
+  loadHistoryLocal();
+  renderDashboard();
+  await loadDoctors();
+  await loadHistoryFromDB();
+};
+
+// ══════════════════════════════════════════════════════
+// ── Language
+// ══════════════════════════════════════════════════════
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('preferred_lang', lang);
+  const html = document.documentElement;
+  html.setAttribute('lang', lang);
+  html.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+  document.getElementById('langToggleText').innerText = lang === 'ar' ? 'EN' : 'AR';
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (T[lang]?.[key] !== undefined) el.textContent = T[lang][key];
+  });
+  document.querySelectorAll('select option[data-i18n]').forEach(opt => {
+    const key = opt.getAttribute('data-i18n');
+    if (T[lang]?.[key]) opt.textContent = T[lang][key];
+  });
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  if (user.name) document.getElementById('welcomeMsg').textContent = lang === 'ar' ? `مرحباً ${user.name} 👋` : `Welcome ${user.name} 👋`;
+  renderDashboard();
+  if (!document.getElementById('step2').classList.contains('hidden')) showQuestion(currentQ);
+  if (!document.getElementById('step4').classList.contains('hidden') && resultData.result) showResult(resultData);
+}
+function toggleLanguage() { setLanguage(currentLang === 'ar' ? 'en' : 'ar'); }
+
+// ══════════════════════════════════════════════════════
+// ── View Navigation
+// ══════════════════════════════════════════════════════
+function showView(v) {
+  ['dashboard', 'assessment'].forEach(x => {
+    const el = document.getElementById('view-' + x);
+    if (x === v) {
+      el.classList.remove('hidden');
+      el.style.animation = 'none'; el.offsetHeight; el.style.animation = null;
+    } else {
+      el.classList.add('hidden');
+    }
+    const nav = document.getElementById('nav-' + x);
+    if (nav) nav.classList.toggle('active', x === v);
+  });
+  if (v === 'assessment') resetAssessment();
+  if (v === 'dashboard') renderDashboard();
+}
+
+// ══════════════════════════════════════════════════════
+// ── Assessment Flow
+// ══════════════════════════════════════════════════════
+function goToQuestions() {
+  const name = document.getElementById('childName').value.trim();
+  const age  = document.getElementById('childAge').value;
+  if (!name || !age) { showToast(T[currentLang].toast_fill_info); return; }
+  if (parseInt(age) < 1 || parseInt(age) > 60) { showToast(T[currentLang].toast_age_range); return; }
+  childInfo = {
+    child_name: name, child_age_months: parseInt(age),
+    child_gender: document.getElementById('childGender').value,
+    jaundice: document.getElementById('jaundice').value,
+    family_asd: document.getElementById('familyASD').value,
+  };
+  setStep(2); showQuestion(0);
+}
+
+function showQuestion(i) {
+  currentQ = i;
+  const q = QUESTIONS[i];
+  document.getElementById('qNum').textContent = T[currentLang].question_prefix.replace('{c}', i + 1).replace('{t}', QUESTIONS.length);
+  document.getElementById('qProgress').style.width = `${((i + 1) / 10) * 100}%`;
+  document.getElementById('qText').textContent = q.text[currentLang] || q.text.ar;
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('qCounter').textContent = T[currentLang].answers_counter.replace('{count}', answered);
+  document.getElementById('prevBtn').style.display = i > 0 ? 'inline-flex' : 'none';
+  document.getElementById('nextBtn').disabled = answers[i] === null;
+  document.getElementById('nextBtn').textContent = i === 9
+    ? (currentLang === 'ar' ? 'عرض النتيجة ←' : 'Show Result →')
+    : T[currentLang].next_btn;
+  document.getElementById('optsGrid').innerHTML = OPTS.map(o =>
+    `<button class="opt ${answers[i] === o.val ? 'selected' : ''}" onclick="selectOpt('${o.val}')">
+      <span class="oi">${o.icon}</span>
+      <span class="ol">${o.label[currentLang]}</span>
+    </button>`
+  ).join('');
+}
+function selectOpt(val) { answers[currentQ] = val; document.getElementById('nextBtn').disabled = false; showQuestion(currentQ); }
+function nextQ() { if (currentQ < 9) showQuestion(currentQ + 1); else submitAssessment(); }
+function prevQ() { if (currentQ > 0) showQuestion(currentQ - 1); }
+
+// ══════════════════════════════════════════════════════
+// ── Submit & Result
+// ══════════════════════════════════════════════════════
+async function submitAssessment() {
+  setStep(3);
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  const payload = {
+    user_name: user.name || 'Parent',
+    user_email: user.email || 'parent@test.com',
+    ...childInfo,
+    answers: answers
+  };
+  try {
+    const res = await fetch(`${API_BASE}/api/predict`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok || data.error || !data.screening_id) throw new Error(data.error || 'فشل حفظ الفحص في قاعدة البيانات.');
+    currentScreeningId = data.screening_id;
+    showResult(data);
+  } catch(e) {
+    console.error(e);
+    currentScreeningId = null;
+    showToast('❌ عذراً، حدث خطأ ولم يتم حفظ الفحص. تأكد من الاتصال.');
+    setStep(2);
+  }
+}
+
+function showResult(data) {
+  resultData = data;
+  setStep(4);
+  const isRisk = data.result === 'at_risk', lvl = data.risk_level;
+  const riskPct = Math.round((data.total_score / data.max_score) * 100);
+  const iconClass = riskPct >= 70 ? 'risk' : riskPct >= 40 ? 'medium' : 'safe';
+  document.getElementById('rIcon').className = `result-icon-wrap ${iconClass}`;
+  document.getElementById('rIcon').textContent = `${riskPct}%`;
+  let titleKey = isRisk ? (lvl === 'high' ? 'result_high_title' : 'result_medium_title') : 'result_safe_title';
+  let subKey = isRisk ? 'result_high_sub' : 'result_safe_sub';
+  document.getElementById('rTitle').textContent = T[currentLang][titleKey] || '';
+  document.getElementById('rSub').textContent = T[currentLang][subKey] || '';
+  document.getElementById('rScore').textContent = `${data.total_score} / ${data.max_score}`;
+  document.getElementById('rConf').textContent = `${Math.round(data.confidence * 100)}%`;
+  document.getElementById('rLevel').textContent = { high: T[currentLang].risk_high, medium: T[currentLang].risk_medium, low: T[currentLang].risk_low }[lvl] || '—';
+  const docSection = document.getElementById('doctorSection');
+  if (isRisk) { docSection.classList.remove('hidden'); renderDoctors(); } else { docSection.classList.add('hidden'); }
+  const newEntry = {
+    id: data.screening_id || null, child: childInfo.child_name, age: childInfo.child_age_months,
+    gender: childInfo.child_gender, result: data.result, risk: data.risk_level,
+    conf: data.confidence, doctor: '—', date: new Date().toISOString().split('T')[0], fromDB: !!data.screening_id
+  };
+  if (newEntry.id) childrenHistory = childrenHistory.filter(h => h.id !== newEntry.id);
+  childrenHistory.unshift(newEntry);
+  saveHistoryLocal(); renderDashboard();
+}
+
+// ══════════════════════════════════════════════════════
+// ── Doctors
+// ══════════════════════════════════════════════════════
+function renderDoctors() {
+  selectedDoctorId = null;
+  document.getElementById('assignBtn').disabled = true;
+  document.getElementById('doctorGrid').innerHTML = doctorsList.map(d =>
+    `<div class="doc-card" id="dc${d.id}" onclick="selectDoc('${d.id}')">
+      <div class="doc-name">${d.name[currentLang] || d.name.ar}</div>
+      <div class="doc-spec">${d.spec[currentLang] || d.spec.ar}</div>
+      <span style="font-size:12px;color:var(--accent);margin-top:6px;display:block;font-weight:700">${T[currentLang].doc_available}</span>
+      <div class="doc-check">✓</div>
+    </div>`
+  ).join('');
+}
+
+function selectDoc(id) {
+  selectedDoctorId = id;
+  document.querySelectorAll('.doc-card').forEach(c => c.classList.remove('sel'));
+  document.getElementById('dc' + id)?.classList.add('sel');
+  document.getElementById('assignBtn').disabled = false;
+}
+
+async function assignDoctor() {
+  if (!selectedDoctorId) return;
+  const doc = doctorsList.find(d => String(d.id) === String(selectedDoctorId));
+  if (!doc) return;
+  const docName = doc.name[currentLang] || doc.name.ar;
+  if (currentScreeningId) {
+    try {
+      await fetch(`${API_BASE}/api/assign-doctor`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ screening_id: currentScreeningId, doctor_id: selectedDoctorId })
+      });
+    } catch(e) {}
+  }
+  if (childrenHistory.length) {
+    const idx = currentScreeningId ? childrenHistory.findIndex(h => h.id === currentScreeningId) : 0;
+    if (idx !== -1) childrenHistory[idx].doctor = docName;
+  }
+  saveHistoryLocal(); renderDashboard();
+  showToast(T[currentLang].assign_success.replace('{doctor}', docName));
+  document.getElementById('doctorSection').classList.add('hidden');
+}
+
+// ══════════════════════════════════════════════════════
+// ── Dashboard Render
+// ══════════════════════════════════════════════════════
+function renderDashboard() {
+  document.getElementById('dTotal').textContent = childrenHistory.length;
+  document.getElementById('dRisk').textContent = childrenHistory.filter(c => c.result === 'at_risk').length;
+const latestRiskEl = document.getElementById('dLatestRisk');
+  const latestDateEl = document.getElementById('dLatestDate');
+  const latestRiskCard = document.getElementById('latestRiskCard');
+
+  if (childrenHistory.length > 0) {
+    // السجل الأول هو الأحدث دائمًا لأننا نستخدم unshift
+    const latest = childrenHistory[0]; 
+    const riskTxt = T[currentLang][`risk_${latest.risk}`] || latest.risk;
+    
+    latestRiskEl.textContent = riskTxt; 
+    latestDateEl.textContent = latest.date; 
+
+    if (latest.result === 'at_risk') {
+      latestRiskCard.className = 'metric coral'; 
+      latestRiskEl.style.color = 'var(--coral-400)';
+    } else {
+      latestRiskCard.className = 'metric teal'; 
+      latestRiskEl.style.color = 'var(--teal-400)';
+    }
+  } else {
+    latestRiskEl.textContent = '—';
+    latestDateEl.textContent = '—';
+    latestRiskCard.className = 'metric purple';
+    latestRiskEl.style.color = 'var(--purple-400)';
+  }  
+  const tbody = document.getElementById('childrenBody');
+  if (!childrenHistory.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-icon">👶</div>${T[currentLang].no_screenings}</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = childrenHistory.map(c => {
+    const genderTxt = c.gender === 'male' ? T[currentLang].male : T[currentLang].female;
+    const riskClass = { high: 'badge-red', medium: 'badge-amber', low: 'badge-teal' }[c.risk] || '';
+    const riskTxt = T[currentLang][`risk_${c.risk}`] || c.risk;
+    let doctorHtml = '';
+    if (c.doctor && c.doctor !== '—') {
+      doctorHtml = `<span style="font-size:13px;color:var(--text-2);font-weight:600">${c.doctor}</span>`;
+    } else if (c.result === 'at_risk') {
+      if (c.id) {
+        doctorHtml = `<button class="btn btn-teal-soft btn-sm" style="padding:6px 12px;font-size:12px;" onclick="openDoctorModal('${c.id}')">+ إضافة طبيب</button>`;
+      } else {
+        doctorHtml = `<span style="color:var(--text-3);font-size:12px;">—</span>`;
+      }
+    } else {
+      doctorHtml = `<span style="color:var(--text-3)">—</span>`;
+    }
+    return `<tr class="child-row">
+      <td><div class="td-name">${c.child}</div></td>
+      <td style="font-size:13px;font-weight:600">${c.age} ${T[currentLang].age_unit}</td>
+      <td style="font-size:13px">${genderTxt}</td>
+      <td><span class="badge ${riskClass}">${riskTxt}</span></td>
+      <td>${doctorHtml}</td>
+      <td style="font-size:13px;color:var(--text-3)">${c.date}</td>
+      <td>${c.id
+        ? `<button class="btn btn-outline btn-sm" onclick="showReportPDF('${c.id}')">📄 ${T[currentLang].th_new_screening}</button>`
+        : `<button class="btn btn-outline btn-sm" onclick="showView('assessment')">${T[currentLang].th_new_screening}</button>`
+      }</td>
+    </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// ── Step Wizard
+// ══════════════════════════════════════════════════════
+function setStep(n) {
+  [1, 2, 3, 4].forEach(i => {
+    const stepEl = document.getElementById('step' + i);
+    if (i === n) {
+      stepEl.classList.remove('hidden');
+      stepEl.style.animation = 'none'; stepEl.offsetHeight; stepEl.style.animation = null;
+    } else {
+      stepEl.classList.add('hidden');
+    }
+    const dot = document.getElementById('sd' + i);
+    if (dot) { dot.classList.remove('done', 'active'); if (i < n) dot.classList.add('done'); else if (i === n) dot.classList.add('active'); }
+    const line = document.getElementById('sl' + i);
+    if (line) line.classList.toggle('done', i < n);
+  });
+}
+
+function resetAssessment() {
+  answers = new Array(10).fill(null); childInfo = {}; resultData = {};
+  selectedDoctorId = null; currentScreeningId = null; currentQ = 0;
+  setStep(1);
+  document.getElementById('childName').value = '';
+  document.getElementById('childAge').value = '';
+}
+function logout() { sessionStorage.clear(); window.location.href = 'index.html'; }
+function showToast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg;
+  t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ══════════════════════════════════════════════════════
+// ── PDF Report
+// ══════════════════════════════════════════════════════
+async function showReportPDF(screeningId) {
+  try {
+    const res = await fetch(`${API_BASE}/api/screening/${screeningId}`);
+    if (!res.ok) throw new Error('فشل جلب البيانات');
+    const data = await res.json();
+    const isEnglish = currentLang === 'en';
+
+    const questionsTexts = isEnglish ? [
+      "Does the child respond when called by name?",
+      "Does the child make eye contact with others?",
+      "Does the child point to indicate something he wants?",
+      "Does the child share interest in something with others?",
+      "Does the child imitate what others do?",
+      "Does the child make sounds or words to communicate?",
+      "Does the child smile back at your smile?",
+      "Does the child show interest in other children?",
+      "Does the child play pretend or imaginative games?",
+      "Does the child understand and follow simple instructions?"
+    ] : [
+      "هل يستجيب الطفل عند مناداته باسمه؟",
+      "هل يتواصل الطفل بالعين مع الآخرين؟",
+      "هل يشير بإصبعه للإشارة إلى شيء يريده؟",
+      "هل يتقاسم الاهتمام بشيء مع الآخرين؟",
+      "هل يقلّد ما يفعله الآخرون؟",
+      "هل يُصدر أصواتًا أو كلمات للتواصل؟",
+      "هل يبتسم ردًا على ابتسامتك؟",
+      "هل يُبدي اهتمامًا بالأطفال الآخرين؟",
+      "هل يلعب ألعابًا تخيلية أو تمثيلية؟",
+      "هل يفهم وينفّذ التعليمات البسيطة؟"
+    ];
+
+    const answersMapAr = { 'Always': 'دائمًا', 'Sometimes': 'أحيانًا', 'Never': 'أبدًا', '0': 'دائمًا', '1': 'أبدًا' };
+    const answersMapEn = { 'Always': 'Always', 'Sometimes': 'Sometimes', 'Never': 'Never', '0': 'Always', '1': 'Never' };
+
+    let answersHtml = '';
+    for (let i = 1; i <= 10; i++) {
+      const raw        = data[`q${i}`] ?? data.answers?.[i - 1] ?? '';
+      const key        = String(raw).trim();
+      const answerText = isEnglish ? (answersMapEn[key] || 'Never') : (answersMapAr[key] || 'أبدًا');
+      answersHtml += `
+        <div style="margin-bottom:15px;padding:15px;border-radius:12px;background:#f8fafc;border:1px solid #e5e7eb;">
+          <div style="font-weight:700;margin-bottom:8px;color:#1e293b">${i}. ${questionsTexts[i - 1]}</div>
+          <div style="display:inline-block;padding:6px 14px;border-radius:20px;background:#eef2ff;color:#1e3a8a;font-size:13px;font-weight:700;">${answerText}</div>
+        </div>`;
+    }
+
+    const pred       = data.prediction || {};
+    const resultText = pred.result === 'at_risk' ? (isEnglish ? 'At Risk' : 'خطر') : (isEnglish ? 'Safe' : 'آمن');
+    const riskLevel  = { high: isEnglish ? 'High' : 'عالي', medium: isEnglish ? 'Medium' : 'متوسط', low: isEnglish ? 'Low' : 'منخفض' }[pred.risk_level] || '—';
+
+    const htmlContent = `
+      <div style="font-family:Arial,sans-serif;padding:30px;direction:${isEnglish ? 'ltr' : 'rtl'};color:#111827;">
+        <div style="text-align:center;margin-bottom:30px">
+          <h1 style="color:#0f766e;margin-bottom:8px">${isEnglish ? 'Autism Screening Report' : 'تقرير فحص التوحد'}</h1>
+          <div style="width:80px;height:4px;background:#14b8a6;margin:auto;border-radius:20px;"></div>
+        </div>
+        <div style="background:#f8fafc;border-radius:16px;padding:20px;margin-bottom:25px;border:1px solid #e5e7eb;">
+          <h2 style="margin-bottom:18px;color:#0f172a">${isEnglish ? 'Child Information' : 'معلومات الطفل'}</h2>
+          <p><strong>${isEnglish ? 'Name' : 'الاسم'}:</strong> ${data.child_name}</p>
+          <p><strong>${isEnglish ? 'Age' : 'العمر'}:</strong> ${data.child_age_months} ${isEnglish ? 'Months' : 'شهر'}</p>
+          <p><strong>${isEnglish ? 'Gender' : 'الجنس'}:</strong> ${data.child_gender === 'male' ? (isEnglish ? 'Male' : 'ذكر') : (isEnglish ? 'Female' : 'أنثى')}</p>
+        </div>
+        <div style="background:#fff;border-radius:16px;padding:20px;border:1px solid #e5e7eb;margin-bottom:25px;">
+          <h2 style="margin-bottom:20px;color:#0f172a">${isEnglish ? 'Questions & Answers' : 'الأسئلة والإجابات'}</h2>
+          ${answersHtml}
+        </div>
+        <div style="background:${pred.result === 'at_risk' ? '#fef2f2' : '#f0fdf4'};border:1px solid ${pred.result === 'at_risk' ? '#fecaca' : '#bbf7d0'};border-radius:16px;padding:20px;margin-bottom:25px;">
+          <h2 style="margin-bottom:15px;color:#0f172a">${isEnglish ? 'Final Result' : 'النتيجة النهائية'}</h2>
+          <p><strong>${isEnglish ? 'Result' : 'التصنيف'}:</strong> ${resultText}</p>
+          <p><strong>${isEnglish ? 'Risk Level' : 'مستوى الخطر'}:</strong> ${riskLevel}</p>
+          <p><strong>${isEnglish ? 'Score' : 'النتيجة'}:</strong> ${data.total_score}/10</p>
+        </div>
+        <div style="margin-top:35px;padding:18px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:13px;line-height:1.7;">
+          ⚠️ ${isEnglish
+            ? 'This report is an early screening support tool only and is not a final medical diagnosis.'
+            : 'هذا التقرير أداة مساعدة للفحص المبكر فقط وليس تشخيصًا طبيًا نهائيًا.'}
+        </div>
+      </div>`;
+
+    html2pdf().set({
+      margin: 0.5,
+      filename: `تقرير_${data.child_name}_${(data.created_at || '').slice(0, 10) || 'تاريخ'}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    }).from(htmlContent).save();
+
+  } catch(err) { console.error(err); alert(err.message); }
+}
+
+// ══════════════════════════════════════════════════════
+// ── Quick Doctor Modal
+// ══════════════════════════════════════════════════════
+let quickScreeningId = null;
+let quickDoctorId    = null;
+
+function openDoctorModal(screeningId) {
+  quickScreeningId = screeningId;
+  quickDoctorId    = null;
+  document.getElementById('modalAssignBtn').disabled = true;
+  document.getElementById('modalDoctorGrid').innerHTML = doctorsList.map(d =>
+    `<div class="doc-card" id="mdc${d.id}" onclick="selectModalDoc('${d.id}')">
+      <div class="doc-name">${d.name[currentLang] || d.name.ar}</div>
+      <div class="doc-spec">${d.spec[currentLang] || d.spec.ar}</div>
+      <span style="font-size:12px;color:var(--accent);margin-top:6px;display:block;font-weight:700">● متاح</span>
+      <div class="doc-check">✓</div>
+    </div>`
+  ).join('');
+  document.getElementById('doctorModal').classList.remove('hidden');
+}
+
+function selectModalDoc(id) {
+  quickDoctorId = id;
+  document.querySelectorAll('#modalDoctorGrid .doc-card').forEach(c => c.classList.remove('sel'));
+  document.getElementById('mdc' + id)?.classList.add('sel');
+  document.getElementById('modalAssignBtn').disabled = false;
+}
+
+function closeDoctorModal() {
+  document.getElementById('doctorModal').classList.add('hidden');
+  quickScreeningId = null; quickDoctorId = null;
+}
+
+async function confirmQuickAssign() {
+  if (!quickScreeningId || !quickDoctorId) return;
+  const btn = document.getElementById('modalAssignBtn');
+  btn.textContent = 'جاري الحفظ...'; btn.disabled = true;
+  try {
+    const res = await fetch(`${API_BASE}/api/assign-doctor`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ screening_id: quickScreeningId, doctor_id: quickDoctorId })
+    });
+    if (res.ok) {
+      showToast('تم تعيين الطبيب بنجاح ✓');
+      closeDoctorModal();
+      await loadHistoryFromDB();
+    } else {
+      showToast('حدث خطأ أثناء التعيين.');
+      btn.textContent = 'تأكيد التعيين'; btn.disabled = false;
+    }
+  } catch(e) {
+    showToast('خطأ في الاتصال بالخادم.');
+    btn.textContent = 'تأكيد التعيين'; btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>

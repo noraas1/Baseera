@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n="page_title">لوحة المختص — بصيرة</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  --teal-50:#E1F5EE;--teal-100:#9FE1CB;--teal-400:#1D9E75;
+  --teal-600:#0F6E56;--teal-800:#085041;
+  --purple-50:#EEEDFE;--purple-400:#7F77DD;
+  --purple-600:#534AB7;--purple-800:#3C3489;
+  --coral-50:#FAECE7;--coral-400:#D85A30;
+  --amber-50:#FAEEDA;--amber-400:#EF9F27;
+  --red-50:#FCEBEB;--red-400:#E24B4A;
+  --bg:#0D1117; --bg2:#111827; --bg3:#161D2C;
+  --surface:#1A2235; --surface2:#1F2A3C; --surface3:#243045;
+  --border:rgba(255,255,255,0.07); --border-md:rgba(255,255,255,0.13);
+  --border-accent:rgba(127,119,221,0.35);
+  --text:#F0EEE9; --text-2:#A0A8B8; --text-3:#606878;
+  --radius:10px; --radius-lg:14px; --radius-xl:20px; --radius-2xl:28px;
+  --font:'Tajawal',system-ui,sans-serif; --font-mono:'Space Mono',monospace;
+  --shadow:0 2px 12px rgba(0,0,0,0.3); --glow:0 0 30px rgba(127,119,221,0.15);
+  --accent:#7F77DD; --accent-dim:rgba(127,119,221,0.15);
+  --nav-bg:rgba(13,17,23,0.8);
+  --gray-50:rgba(255,255,255,0.03);
+}
+
+body.light-mode {
+  --bg:#F8FAFC; --bg2:#F1F5F9; --bg3:#E2E8F0;
+  --surface:#FFFFFF; --surface2:#F8FAFC; --surface3:#F1F5F9;
+  --border:rgba(0,0,0,0.08); --border-md:rgba(0,0,0,0.12);
+  --border-accent:rgba(127,119,221,0.4);
+  --text:#0F172A; --text-2:#475569; --text-3:#64748B;
+  --shadow:0 8px 30px rgba(0,0,0,0.05); --glow:0 0 30px rgba(127,119,221,0.2);
+  --nav-bg:rgba(255,255,255,0.85); --accent-dim:rgba(127,119,221,0.1);
+  --gray-50:#F8FAFC;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;direction:rtl;scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;min-height:100vh;transition:background 0.4s ease,color 0.4s ease;}
+
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(127,119,221,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(127,119,221,0.04) 1px,transparent 1px);
+  background-size:48px 48px;pointer-events:none;z-index:0;
+}
+body::after{
+  content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;
+  background:radial-gradient(ellipse at 60% 20%,rgba(127,119,221,0.05) 0%,transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(29,158,117,0.04) 0%,transparent 50%);
+  pointer-events:none;z-index:0;animation:bgPulse 12s ease-in-out infinite alternate;
+}
+@keyframes bgPulse{from{opacity:0.6}to{opacity:1}}
+
+/* ── Layout ── */
+.page{max-width:1180px;margin:0 auto;padding:7rem 1.5rem 2rem;position:relative;z-index:1;}
+h1{font-size:26px;font-weight:800;line-height:1.2;letter-spacing:-0.5px;color:var(--text);}
+h2{font-size:19px;font-weight:700;color:var(--text);}
+h3{font-size:15px;font-weight:700;color:var(--text);}
+.subtitle{font-size:14px;color:var(--text-2);margin-top:5px}
+
+/* ── Navigation ── */
+.topnav{
+  background:var(--nav-bg);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);padding:0 1.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  height:64px;position:fixed;top:0;width:100%;z-index:100;
+  animation:slideDownNav 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+@keyframes slideDownNav{from{transform:translateY(-100%);}to{transform:translateY(0);}}
+
+.nav-left-group{display:flex;align-items:center;gap:0.5rem;}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-brand img{height:110px;width:auto;border-radius:8px;}
+.nav-brand-text{font-weight:900;font-size:18px;color:var(--text);letter-spacing:-0.5px;}
+.nav-divider{width:1px;height:28px;background:var(--border-md);margin:0 1rem;}
+.nav-user-area{display:flex;align-items:center;gap:12px;}
+.avatar{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;border:1px solid var(--border-accent);}
+.av-purple{background:var(--accent-dim);color:var(--purple-400);}
+.nav-user-info{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;}
+.nav-user-name{font-size:13px;color:var(--text);font-weight:800;line-height:1.2;}
+.nav-user-role{font-size:11px;color:var(--text-3);font-weight:600;}
+.nav-right-group{display:flex;align-items:center;gap:1.2rem;}
+.nav-tools{display:flex;align-items:center;gap:8px;}
+.icon-btn{width:36px;height:36px;border-radius:50%;background:transparent;border:1px solid transparent;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--text-2);transition:all .2s;}
+.icon-btn:hover{background:rgba(128,128,128,0.1);color:var(--text);border-color:var(--border-md);}
+.lang-text{font-size:12px;font-weight:700;font-family:var(--font);}
+.btn-logout{padding:6px 12px;font-size:12px;font-weight:700;border-radius:var(--radius);background:rgba(162,45,45,0.1);color:var(--red-400);border:1px solid rgba(162,45,45,0.2);cursor:pointer;transition:all .2s;}
+.btn-logout:hover{background:rgba(162,45,45,0.2);}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 20px;border-radius:var(--radius);font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .2s;text-decoration:none;white-space:nowrap;}
+.btn:active{transform:scale(0.97)}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 16px rgba(127,119,221,0.3);}
+.btn-primary:hover{background:var(--purple-600);box-shadow:0 6px 20px rgba(127,119,221,0.4)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border-md);}
+.btn-outline:hover{background:var(--accent-dim);border-color:var(--border-accent)}
+.btn-ghost{background:transparent;color:var(--text-2);border:none;padding:7px 13px}
+.btn-ghost:hover{background:rgba(128,128,128,0.1);color:var(--text)}
+.btn-sm{padding:6px 14px;font-size:13px}
+.btn-lg{padding:14px 30px;font-size:15px;border-radius:var(--radius-lg)}
+.btn-full{width:100%;}
+.btn-teal-soft{background:rgba(29,158,117,0.15);color:var(--teal-400);border:0.5px solid rgba(29,158,117,0.25);}
+.btn-teal-soft:hover{background:rgba(29,158,117,0.2)}
+
+/* ── Forms ── */
+input,select{width:100%;padding:12px 16px;border:1px solid var(--border-md);border-radius:var(--radius);font-family:var(--font);font-size:14px;color:var(--text);background:var(--surface2);outline:none;transition:all .2s;direction:rtl;}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(127,119,221,0.15)}
+
+/* ── Metrics ── */
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;text-align:center;transition:all .2s;position:relative;overflow:hidden;box-shadow:var(--shadow);}
+.metric:hover{border-color:var(--border-md);transform:translateY(-2px)}
+.metric-val{font-size:32px;font-weight:900;line-height:1;font-family:var(--font-mono)}
+.metric-lbl{font-size:12px;color:var(--text-3);margin-top:8px;font-weight:700}
+.metric.teal .metric-val{color:var(--teal-400)}.metric.teal{border-color:rgba(29,158,117,0.2)}
+.metric.purple .metric-val{color:var(--purple-400)}.metric.purple{border-color:rgba(127,119,221,0.2)}
+.metric.coral .metric-val{color:var(--coral-400)}.metric.coral{border-color:rgba(216,90,48,0.2)}
+.metric.amber .metric-val{color:var(--amber-400)}.metric.amber{border-color:rgba(239,159,39,0.2)}
+
+/* ── Table & Badges ── */
+.table-wrap{overflow-x:auto;border-radius:var(--radius-lg);border:0.5px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:right;padding:14px 16px;font-size:12px;font-weight:800;color:var(--text-3);background:rgba(128,128,128,0.03);border-bottom:0.5px solid var(--border);white-space:nowrap;}
+td{padding:14px 16px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:middle}
+tr:hover td{background:rgba(128,128,128,0.02)}
+.td-name{font-weight:700;color:var(--text)}
+
+.badge{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:100px;font-size:12px;font-weight:700;white-space:nowrap;font-family:var(--font-mono);}
+.badge-teal{background:rgba(29,158,117,0.15);color:var(--teal-400);border:0.5px solid rgba(29,158,117,0.3)}
+.badge-amber{background:rgba(239,159,39,0.15);color:var(--amber-400);border:0.5px solid rgba(239,159,39,0.3)}
+.badge-red{background:rgba(162,45,45,0.15);color:var(--red-400);border:0.5px solid rgba(162,45,45,0.3)}
+
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-left:6px;}
+.dot-pending{background:var(--amber-400);}
+.dot-accepted{background:var(--teal-400);}
+.accept-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:700;border:1px solid transparent;}
+.accept-pending{background:rgba(239,159,39,0.1);color:var(--amber-400);border-color:rgba(239,159,39,0.2);}
+.accept-accepted{background:rgba(29,158,117,0.1);color:var(--teal-400);border-color:rgba(29,158,117,0.2);}
+
+/* ── Modal Details ── */
+.child-detail-modal .detail-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 0;border-bottom:1px solid var(--border-md);font-size:14px;
+}
+.child-detail-modal .detail-row:last-child{border-bottom:none;}
+.detail-label{color:var(--text-3);font-weight:700;font-size:13px;}
+.detail-val{font-weight:800;color:var(--text);}
+
+.q-answer-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:1rem 0;}
+.q-ans-box{background:var(--surface2);border:1px solid var(--border-md);border-radius:var(--radius);padding:10px 6px;text-align:center;transition:transform 0.2s;}
+.q-ans-box:hover{transform:translateY(-2px);}
+.q-ans-num{font-size:11px;color:var(--text-3);font-family:var(--font-mono);font-weight:700;}
+.q-ans-val{font-size:20px;font-weight:800;margin:4px 0;}
+.q-ans-lbl{font-size:11px;font-weight:700;}
+.q-ans-box.ans-1{background:rgba(29,158,117,0.1);border-color:rgba(29,158,117,0.3);}
+.q-ans-box.ans-0{background:rgba(162,45,45,0.1);border-color:rgba(162,45,45,0.3);}
+.q-ans-box.ans-1 .q-ans-lbl{color:var(--teal-400);}
+.q-ans-box.ans-0 .q-ans-lbl{color:var(--red-400);}
+
+/* ── Modal & Toast ── */
+.modal-bg{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:1;transition:opacity .3s;}
+.modal-bg.hidden{opacity:0;pointer-events:none}
+.modal{background:var(--surface);padding:2rem;border-radius:var(--radius-2xl);width:90%;max-width:580px;box-shadow:0 20px 60px rgba(0,0,0,0.3),var(--glow);border:1px solid var(--border-md);transform:translateY(0);transition:transform .3s;max-height:90vh;overflow-y:auto;}
+.modal-bg.hidden .modal{transform:translateY(30px)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.modal-title{font-size:18px;font-weight:900;color:var(--text)}
+.close-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border-md);background:rgba(128,128,128,0.1);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--text-2);transition:all .15s;}
+.close-btn:hover{background:var(--red-400);color:#fff;border-color:var(--red-400);}
+
+.disclaimer{background:rgba(127,119,221,0.1);border-right:3px solid var(--purple-400);border-radius:0 var(--radius) var(--radius) 0;padding:14px 18px;font-size:13px;color:var(--purple-400);font-weight:700;margin:1.5rem 0;}
+
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface3);color:var(--text);padding:14px 28px;border-radius:100px;font-size:14px;font-weight:800;opacity:0;transition:all .3s;z-index:400;box-shadow:var(--shadow);border:1px solid var(--border-md);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.empty{text-align:center;padding:3rem;color:var(--text-3)}
+.empty-icon{font-size:40px;margin-bottom:.75rem;opacity:0.5}
+
+/* ── Animation ── */
+.animate-fade-in{animation:fadeInUp 0.5s cubic-bezier(0.16,1,0.3,1) forwards;}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+
+@media(max-width:760px){
+  .grid-4{grid-template-columns:1fr 1fr;}
+  .nav-user-info,.btn-logout{display:none}
+  .q-answer-grid{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:480px){.grid-4{grid-template-columns:1fr;}}
+
+/* ══════════════════════════════════════════════
+   LTR FLIP — تنعكس الصفحة كلها عند الإنجليزية
+   ══════════════════════════════════════════════ */
+html[dir="ltr"] .topnav       { flex-direction: row; }
+html[dir="ltr"] .nav-left-group { flex-direction: row; }
+html[dir="ltr"] .nav-right-group { flex-direction: row; }
+html[dir="ltr"] .nav-left     { flex-direction: row; }
+html[dir="ltr"] .nav-right    { flex-direction: row; }
+html[dir="ltr"] .nav-user-info { align-items: flex-start; }
+html[dir="ltr"] .nav-tools    { flex-direction: row; }
+
+/* Navbar links: start from left */
+html[dir="ltr"] .nav-links    { flex-direction: row; }
+
+/* Inputs */
+html[dir="ltr"] input,
+html[dir="ltr"] select,
+html[dir="ltr"] textarea { direction: ltr; text-align: left; }
+
+/* Tables */
+html[dir="ltr"] th { text-align: left; }
+html[dir="ltr"] td { text-align: left; }
+
+/* Form labels */
+html[dir="ltr"] label { text-align: left; }
+
+/* Section headers */
+html[dir="ltr"] .section-header { flex-direction: row; }
+
+/* Steps wizard */
+html[dir="ltr"] .steps { flex-direction: row; }
+html[dir="ltr"] .q-nav { flex-direction: row; }
+
+/* Result stats */
+html[dir="ltr"] .result-stats { flex-direction: row; }
+
+/* Options grid */
+html[dir="ltr"] .opts { direction: ltr; }
+
+/* Doc grid */
+html[dir="ltr"] .doc-grid { direction: ltr; }
+
+/* Modal header */
+html[dir="ltr"] .modal-header { flex-direction: row; }
+html[dir="ltr"] .modal-content { direction: ltr; }
+html[dir="ltr"] .modal { direction: ltr; }
+
+/* status dot */
+html[dir="ltr"] .status-dot { margin-left: 0; margin-right: 6px; }
+
+/* Alert/Disclaimer: border flips */
+html[dir="ltr"] .disclaimer {
+  border-right: none;
+  border-left: 3px solid var(--amber-400, #EF9F27);
+  border-radius: var(--radius, 10px) 0 0 var(--radius, 10px);
+}
+html[dir="ltr"] .alert-info {
+  border-inline-start: 3px solid var(--accent, #1D9E75);
+  border-radius: var(--radius, 10px);
+}
+
+/* Search bars */
+html[dir="ltr"] .search-bar { flex-direction: row; }
+
+/* Toast */
+html[dir="ltr"] .toast { left: 50%; right: auto; }
+
+/* smooth transition */
+.topnav, .page, .modal, .modal-content, .result-card, .info-card, .question-card { transition: all 0.25s ease; }
+
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-left-group">
+    <a href="index.html" class="nav-brand">
+      <img src="logo.png" alt="بصيرة" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <span class="nav-brand-text" style="display:none">بصيرة</span>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-user-area">
+      <div class="avatar av-purple" id="sAvatar">د</div>
+      <div class="nav-user-info">
+        <span class="nav-user-name" id="sName">المختص</span>
+        <span class="nav-user-role" data-i18n="role_specialist">طبيب مختص</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-right-group">
+    <div class="nav-tools">
+      <button class="icon-btn" id="themeToggleBtn" title="تغيير المظهر">
+        <span id="themeIcon">🌓</span>
+      </button>
+      <button class="icon-btn" id="langToggleBtn" title="تغيير اللغة">
+        <span class="lang-text" id="langToggleText">EN</span>
+      </button>
+    </div>
+    <button class="btn-logout" onclick="logout()" data-i18n="logout_btn">خروج</button>
+  </div>
+</nav>
+
+<div class="page animate-fade-in">
+
+  <div style="margin-bottom:2rem">
+    <h1 id="specWelcome" data-i18n="welcome_title">مرحباً 👨‍⚕️</h1>
+    <p class="subtitle" data-i18n="subtitle">الأطفال المحالين إليك للمتابعة والتقييم</p>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:2rem">
+    <div class="metric teal"><div class="metric-val" id="mAll">0</div><div class="metric-lbl" data-i18n="metric_total">إجمالي الحالات</div></div>
+    <div class="metric amber"><div class="metric-val" id="mPending">0</div><div class="metric-lbl" data-i18n="metric_pending">بانتظار القبول</div></div>
+    <div class="metric purple"><div class="metric-val" id="mAccepted">0</div><div class="metric-lbl" data-i18n="metric_accepted">مقبول ومتابَع</div></div>
+    <div class="metric coral"><div class="metric-val" id="mHighRisk">0</div><div class="metric-lbl" data-i18n="metric_high_risk">خطر عالي</div></div>
+  </div>
+
+  <!-- Filters -->
+  <div style="display:flex;gap:12px;margin-bottom:1.5rem;align-items:center;flex-wrap:wrap">
+    <input type="text" id="searchChild" placeholder="ابحث باسم الطفل أو ولي الأمر..." style="max-width:320px;flex:1;" oninput="renderTable()" data-i18n-placeholder="search_placeholder">
+    <select id="filterStatus" onchange="renderTable()" style="max-width:180px">
+      <option value="" data-i18n="filter_all_status">كل الحالات</option>
+      <option value="pending" data-i18n="filter_pending">بانتظار القبول</option>
+      <option value="accepted" data-i18n="filter_accepted">مقبول</option>
+    </select>
+    <select id="filterRisk" onchange="renderTable()" style="max-width:160px">
+      <option value="" data-i18n="filter_all_risk">كل المستويات</option>
+      <option value="high" data-i18n="filter_high_risk">عالي</option>
+      <option value="medium" data-i18n="filter_medium_risk">متوسط</option>
+      <option value="low" data-i18n="filter_low_risk">منخفض</option>
+    </select>
+  </div>
+
+  <!-- Table -->
+  <div style="background:var(--surface);border:1px solid var(--border-md);border-radius:var(--radius-xl);box-shadow:var(--shadow),var(--glow);padding:1rem;">
+    <div class="table-wrap" style="border:none;">
+      <table>
+        <thead>
+          <tr>
+            <th data-i18n="th_index">#</th>
+            <th data-i18n="th_child_name">اسم الطفل</th>
+            <th data-i18n="th_parent">ولي الأمر</th>
+            <th data-i18n="th_age">العمر</th>
+            <th data-i18n="th_gender">الجنس</th>
+            <th data-i18n="th_risk_level">مستوى الخطر</th>
+            <th data-i18n="th_result" style="display:none;">النتيجة</th>
+            <th data-i18n="th_confidence" style="display:none;">ثقة الموديل</th>
+            <th data-i18n="th_status">حالة القبول</th>
+            <th data-i18n="th_date">تاريخ الإحالة</th>
+            <th data-i18n="th_action">إجراء</th>
+            <th data-i18n="th_contact">للتواصل</th>
+          </tr>
+        </thead>
+        <tbody id="specTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Detail Modal -->
+<div class="modal-bg hidden" id="detailModal">
+  <div class="modal child-detail-modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modalChildName" data-i18n="modal_title_prefix">تفاصيل الحالة</span>
+      <button class="close-btn" onclick="closeModal()">×</button>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid var(--border-md);border-radius:var(--radius-lg);padding:1rem 1.5rem;margin-bottom:1.5rem;">
+      <div class="detail-row"><span class="detail-label" data-i18n="detail_child_name">اسم الطفل</span><span class="detail-val" id="dChildName">—</span></div>
+      <div class="detail-row"><span class="detail-label" data-i18n="detail_parent">ولي الأمر</span><span class="detail-val" id="dParent">—</span></div>
+      <div class="detail-row"><span class="detail-label" data-i18n="detail_age">العمر</span><span class="detail-val" id="dAge">—</span></div>
+      <div class="detail-row"><span class="detail-label" data-i18n="detail_gender">الجنس</span><span class="detail-val" id="dGender">—</span></div>
+      <div class="detail-row"><span class="detail-label" data-i18n="detail_jaundice">يرقان عند الولادة</span><span class="detail-val" id="dJaundice">—</span></div>
+      <div class="detail-row"><span class="detail-label" data-i18n="detail_family">تاريخ عائلي بالتوحد</span><span class="detail-val" id="dFamily">—</span></div>
+    </div>
+
+    <div style="display:flex;gap:12px;margin-bottom:1.5rem;flex-wrap:wrap">
+      <div style="flex:1;background:var(--surface2);border:1px solid var(--border-md);border-radius:var(--radius-lg);padding:14px;text-align:center">
+        <div style="font-size:24px;font-weight:900;font-family:var(--font-mono);color:var(--text)" id="dScore">—</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text-3);margin-top:4px" data-i18n="score_label">المجموع / 10</div>
+      </div>
+      <div style="flex:1;background:var(--surface2);border:1px solid var(--border-md);border-radius:var(--radius-lg);padding:14px;text-align:center">
+        <div style="font-size:24px;font-weight:900;font-family:var(--font-mono);color:var(--text)" id="dConf">—</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text-3);margin-top:4px" data-i18n="confidence_label">ثقة الموديل</div>
+      </div>
+      <div style="flex:1;background:var(--surface2);border:1px solid var(--border-md);border-radius:var(--radius-lg);padding:14px;text-align:center">
+        <div style="font-size:20px;font-weight:900;color:var(--text)" id="dRisk">—</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text-3);margin-top:4px" data-i18n="risk_label">مستوى الخطر</div>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom:1rem;text-align:center;" data-i18n="answers_title">إجابات الأسئلة العشرة</h3>
+    <div class="q-answer-grid" id="dAnswers"></div>
+
+    <div class="disclaimer" data-i18n="disclaimer">
+      هذه النتائج من نموذج Random Forest AI ودقته 96.68% — استخدمها كمرجع للتقييم السريري.
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:center;" id="modalActions"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// ── Dark / Light Mode
+// ══════════════════════════════════════════════════════
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+const themeIcon = document.getElementById('themeIcon');
+
+function applyTheme(isLight) {
+  document.body.classList.toggle('light-mode', isLight);
+  themeIcon.textContent = isLight ? '🌙' : '☀️';
+}
+applyTheme(localStorage.getItem('numu_theme') === 'light');
+themeToggleBtn.addEventListener('click', () => {
+  const willBeLight = !document.body.classList.contains('light-mode');
+  localStorage.setItem('numu_theme', willBeLight ? 'light' : 'dark');
+  applyTheme(willBeLight);
+});
+
+// ══════════════════════════════════════════════════════
+// ── State
+// ══════════════════════════════════════════════════════
+let cases          = [];
+let selectedCaseId = null;
+let currentLang    = 'ar';
+
+// ══════════════════════════════════════════════════════
+// ── Load from DB (Full logic from File 3)
+// ══════════════════════════════════════════════════════
+async function loadCasesFromDB() {
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  if (!user.email) return;
+  try {
+    const doctorRes = await fetch(`http://127.0.0.1:5000/api/doctors`);
+    const doctors   = await doctorRes.json();
+    const doctor    = doctors.find(d => d.email === user.email);
+    if (!doctor) { console.warn('الدكتور غير موجود في DB'); return; }
+
+    const res  = await fetch(`http://127.0.0.1:5000/api/specialist/${doctor.id}/children`);
+    const data = await res.json();
+    if (!Array.isArray(data)) return;
+
+    cases = data.map(s => {
+      const pred = Array.isArray(s.predictions) && s.predictions.length
+        ? s.predictions[0]
+        : (s.predictions || {});
+      return {
+        id:          s.id,
+        child:       s.child_name,
+        parent:      s.user_name  || '—',
+        parentEmail: s.user_email || '—',
+        age:         s.child_age_months,
+        gender:      s.child_gender,
+        jaundice:    s.jaundice,
+        family:      s.family_asd,
+        score:       s.total_score,
+        conf:        pred.confidence || 0,
+        result:      pred.result     || 'not_at_risk',
+        risk:        pred.risk_level || 'low',
+        answers:     [1,2,3,4,5,6,7,8,9,10].map(i => s[`q${i}`] || '—'),
+        status:      s.acceptance_status || 'pending',
+        date:        s.created_at ? s.created_at.split('T')[0] : '—'
+      };
+    });
+
+    updateMetrics();
+    renderTable();
+  } catch(err) { console.error('خطأ في تحميل الحالات:', err); }
+}
+
+// ══════════════════════════════════════════════════════
+// ── Translations
+// ══════════════════════════════════════════════════════
+const translations = {
+  ar: {
+    page_title:"لوحة المختص — بصيرة",brand:"بصيرة",nav_children:"الأطفال المسجلون",
+    logout_btn:"خروج",welcome_title:"مرحباً 👨‍⚕️",
+    subtitle:"الأطفال المحالين إليك للمتابعة والتقييم",
+    metric_total:"إجمالي الحالات",metric_pending:"بانتظار القبول",
+    metric_accepted:"مقبول ومتابَع",metric_high_risk:"خطر عالي",
+    search_placeholder:"ابحث باسم الطفل أو ولي الأمر...",
+    filter_all_status:"كل الحالات",filter_pending:"بانتظار القبول",filter_accepted:"مقبول",
+    filter_all_risk:"كل المستويات",filter_high_risk:"عالي",filter_medium_risk:"متوسط",filter_low_risk:"منخفض",
+    th_index:"#",th_child_name:"اسم الطفل",th_parent:"ولي الأمر",th_age:"العمر",th_gender:"الجنس",
+    th_risk_level:"مستوى الخطر",th_result:"النتيجة",th_confidence:"ثقة الموديل",
+    th_status:"حالة القبول",th_date:"تاريخ الإحالة",th_action:"إجراء",th_contact:"للتواصل",
+    modal_title_prefix:"تفاصيل الحالة",
+    detail_child_name:"اسم الطفل",detail_parent:"ولي الأمر",detail_age:"العمر",
+    detail_gender:"الجنس",detail_jaundice:"يرقان عند الولادة",detail_family:"تاريخ عائلي بالتوحد",
+    score_label:"المجموع / 10",confidence_label:"ثقة الموديل",risk_label:"مستوى الخطر",
+    answers_title:"إجابات الأسئلة العشرة",
+    disclaimer:"هذه النتائج من نموذج Random Forest AI ودقته 96.68% — استخدمها كمرجع للتقييم السريري.",
+    male:"ذكر",female:"أنثى",yes:"نعم",no:"لا",
+    at_risk:"خطر",safe:"آمن",risk_high:"عالي",risk_medium:"متوسط",risk_low:"منخفض",
+    status_pending:"بانتظار",status_accepted:"مقبول",
+    btn_details:"التفاصيل",btn_accept:"قبول",already_accepted:"✓ مقبول",
+    accept_confirm:"✓ تم قبول الحالة",no_cases:"لا توجد حالات",empty_icon:"👶",
+    accept_case_btn:"✓ قبول الحالة والمتابعة",already_accepted_badge:"✓ تم قبول هذه الحالة",
+    role_specialist:"طبيب مختص"
+  },
+  en: {
+    page_title:"Specialist Dashboard — Baseera",brand:"Baseera",nav_children:"Registered Children",
+    logout_btn:"Logout",welcome_title:"Welcome 👨‍⚕️",
+    subtitle:"Children referred to you for follow-up and assessment",
+    metric_total:"Total Cases",metric_pending:"Pending Approval",
+    metric_accepted:"Accepted & Followed",metric_high_risk:"High Risk",
+    search_placeholder:"Search by child or parent name...",
+    filter_all_status:"All Cases",filter_pending:"Pending",filter_accepted:"Accepted",
+    filter_all_risk:"All Levels",filter_high_risk:"High",filter_medium_risk:"Medium",filter_low_risk:"Low",
+    th_index:"#",th_child_name:"Child Name",th_parent:"Parent",th_age:"Age",th_gender:"Gender",
+    th_risk_level:"Risk Level",th_result:"Result",th_confidence:"Model Confidence",
+    th_status:"Status",th_date:"Referral Date",th_action:"Action",th_contact:"Contact",
+    modal_title_prefix:"Case Details",
+    detail_child_name:"Child Name",detail_parent:"Parent",detail_age:"Age",
+    detail_gender:"Gender",detail_jaundice:"Jaundice at birth",detail_family:"Family history of autism",
+    score_label:"Score / 10",confidence_label:"Model Confidence",risk_label:"Risk Level",
+    answers_title:"Answers to the 10 questions",
+    disclaimer:"These results are from the Random Forest AI model with 96.68% accuracy — use as reference for clinical assessment.",
+    male:"Male",female:"Female",yes:"Yes",no:"No",
+    at_risk:"At Risk",safe:"Safe",risk_high:"High",risk_medium:"Medium",risk_low:"Low",
+    status_pending:"Pending",status_accepted:"Accepted",
+    btn_details:"Details",btn_accept:"Accept",already_accepted:"✓ Accepted",
+    accept_confirm:"✓ Case accepted",no_cases:"No cases found",empty_icon:"👶",
+    accept_case_btn:"✓ Accept case & follow up",already_accepted_badge:"✓ This case has been accepted",
+    role_specialist:"Specialist"
+  }
+};
+
+// ══════════════════════════════════════════════════════
+// ── Language
+// ══════════════════════════════════════════════════════
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('preferred_lang', lang);
+  const htmlTag = document.documentElement;
+  htmlTag.setAttribute('lang', lang);
+  htmlTag.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+  document.body.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
+    el.style.textAlign = lang === 'ar' ? 'right' : 'left';
+  });
+  document.getElementById('langToggleText').innerText = lang === 'ar' ? 'EN' : 'AR';
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang]?.[key]) {
+      if (el.tagName === 'INPUT' && el.hasAttribute('data-i18n-placeholder')) {
+        el.placeholder = translations[lang][key];
+      } else {
+        el.textContent = translations[lang][key];
+      }
+    }
+  });
+  document.querySelectorAll('select option').forEach(opt => {
+    const key = opt.getAttribute('data-i18n');
+    if (key && translations[lang]?.[key]) opt.textContent = translations[lang][key];
+  });
+
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  if (user.name) {
+    document.getElementById('specWelcome').textContent = lang === 'ar'
+      ? `مرحباً ${user.name} 👨‍⚕️`
+      : `Welcome ${user.name} 👨‍⚕️`;
+  }
+
+  updateMetrics();
+  renderTable();
+  if (selectedCaseId !== null && !document.getElementById('detailModal').classList.contains('hidden')) {
+    openDetail(selectedCaseId);
+  }
+}
+function toggleLanguage() { setLanguage(currentLang === 'ar' ? 'en' : 'ar'); }
+
+// ══════════════════════════════════════════════════════
+// ── Metrics & Table
+// ══════════════════════════════════════════════════════
+function updateMetrics() {
+  document.getElementById('mAll').textContent      = cases.length;
+  document.getElementById('mPending').textContent  = cases.filter(c => c.status === 'pending').length;
+  document.getElementById('mAccepted').textContent = cases.filter(c => c.status === 'accepted').length;
+  document.getElementById('mHighRisk').textContent = cases.filter(c => c.risk === 'high').length;
+}
+
+function renderTable() {
+  const q      = document.getElementById('searchChild').value.toLowerCase();
+  const status = document.getElementById('filterStatus').value;
+  const risk   = document.getElementById('filterRisk').value;
+
+  const filtered = cases.filter(c => {
+    const matchQ   = c.child.toLowerCase().includes(q) || c.parent.toLowerCase().includes(q);
+    const matchSt  = status ? c.status === status : true;
+    const matchRsk = risk   ? c.risk === risk     : true;
+    return matchQ && matchSt && matchRsk;
+  });
+
+  const tbody = document.getElementById('specTable');
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="12"><div class="empty"><div class="empty-icon">${translations[currentLang].empty_icon}</div>${translations[currentLang].no_cases}</div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map((c, i) => {
+    const genderText    = c.gender === 'male' ? translations[currentLang].male : translations[currentLang].female;
+    const riskClass     = { high: 'badge-red', medium: 'badge-amber', low: 'badge-teal' }[c.risk] || '';
+    const riskLabel     = translations[currentLang][`risk_${c.risk}`] || c.risk;
+    const statusText    = c.status === 'accepted' ? translations[currentLang].status_accepted : translations[currentLang].status_pending;
+    const statusClass   = c.status === 'accepted' ? 'accept-accepted' : 'accept-pending';
+    const dotClass      = c.status === 'accepted' ? 'dot-accepted' : 'dot-pending';
+    return `
+      <tr>
+        <td style="color:var(--text-3);font-weight:700;">${i + 1}</td>
+        <td><div class="td-name">${c.child}</div><div style="display:none">ID: ${c.id}</div></td>
+        <td style="font-size:13px;color:var(--text-2);font-weight:600;">${c.parent}</td>
+        <td style="font-size:13px;font-weight:700;">${c.age} ${currentLang === 'ar' ? 'شهر' : 'months'}</td>
+        <td style="font-size:13px">${genderText}</td>
+        <td><span class="badge ${riskClass}">${riskLabel}</span></td>
+        <td style="display:none;"></td>
+        <td style="display:none;"></td>
+        <td>
+          <span class="accept-badge ${statusClass}">
+            <span class="status-dot ${dotClass}"></span>
+            ${statusText}
+          </span>
+        </td>
+        <td style="font-size:12px;color:var(--text-3)">${c.date}</td>
+        <td>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-outline btn-sm" onclick="openDetail('${c.id}')">${translations[currentLang].btn_details}</button>
+            ${c.status === 'pending'
+              ? `<button class="btn btn-primary btn-sm" onclick="acceptCase('${c.id}')">${translations[currentLang].btn_accept}</button>`
+              : ''
+            }
+          </div>
+        </td>
+        <td>
+          <div style="display:flex;justify-content:center;">
+            <a href="mailto:${c.parentEmail}" class="btn btn-sm btn-teal-soft" style="padding:4px 12px;font-size:16px;border-radius:50%;">✉</a>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// ── Detail Modal (Full logic from File 3)
+// ══════════════════════════════════════════════════════
+function openDetail(id) {
+  const c = cases.find(x => x.id === id);
+  if (!c) return;
+  selectedCaseId = id;
+
+  document.getElementById('modalChildName').textContent = `${translations[currentLang].modal_title_prefix}: ${c.child}`;
+  document.getElementById('dChildName').textContent = c.child;
+  document.getElementById('dParent').textContent    = `${c.parent} (${c.parentEmail})`;
+  document.getElementById('dAge').textContent       = `${c.age} ${currentLang === 'ar' ? 'شهرًا' : 'months'}`;
+  document.getElementById('dGender').textContent    = c.gender === 'male' ? translations[currentLang].male : translations[currentLang].female;
+  document.getElementById('dJaundice').textContent  = c.jaundice === 'yes' ? translations[currentLang].yes : translations[currentLang].no;
+  document.getElementById('dFamily').textContent    = c.family === 'yes'   ? translations[currentLang].yes : translations[currentLang].no;
+
+  // الأرقام بـ dir=ltr حتى لا تنعكس (5 / 10 وليس 10 / 5)
+  document.getElementById('dScore').innerHTML = `<span dir="ltr">${c.score} / 10</span>`;
+  document.getElementById('dConf').textContent  = `${Math.round(c.conf * 100)}%`;
+  document.getElementById('dRisk').textContent  = translations[currentLang][`risk_${c.risk}`] || c.risk;
+
+  // رسم الإجابات بناءً على 1 (خطر) أو 0 (طبيعي)
+  const qShort = ['S1','S2','S3','S4','S5','S6','S7','S8','S9','S10'];
+  document.getElementById('dAnswers').innerHTML = c.answers.map((val, i) => {
+    const isRisk = (val == 1);
+    const emoji  = isRisk ? '❌' : '✅';
+    const label  = isRisk
+      ? (currentLang === 'ar' ? 'مؤشر خطر' : 'Risk')
+      : (currentLang === 'ar' ? 'طبيعي'    : 'Normal');
+    const cls = isRisk ? 'ans-0' : 'ans-1';
+    return `
+      <div class="q-ans-box ${cls}">
+        <div class="q-ans-num">${qShort[i]}</div>
+        <div class="q-ans-val">${emoji}</div>
+        <div class="q-ans-lbl">${label}</div>
+      </div>`;
+  }).join('');
+
+  const actionsDiv = document.getElementById('modalActions');
+  if (c.status === 'pending') {
+    actionsDiv.innerHTML = `<button class="btn btn-primary btn-full btn-lg" onclick="acceptCase('${id}');closeModal()">${translations[currentLang].accept_case_btn}</button>`;
+  } else {
+    actionsDiv.innerHTML = `<div class="badge badge-teal" style="font-size:13px;padding:10px 20px">${translations[currentLang].already_accepted_badge}</div>`;
+  }
+
+  document.getElementById('detailModal').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('detailModal').classList.add('hidden');
+  selectedCaseId = null;
+}
+
+// ══════════════════════════════════════════════════════
+// ── Accept Case (Optimistic Update + DB save)
+// ══════════════════════════════════════════════════════
+async function acceptCase(id) {
+  const c = cases.find(x => x.id === id);
+  if (!c) return;
+
+  // تحديث فوري في الواجهة
+  c.status = 'accepted';
+  updateMetrics();
+  renderTable();
+  showToast(`${translations[currentLang].accept_confirm} ${c.child}`);
+
+  // حفظ في DB في الخلفية
+  try {
+    await fetch('http://127.0.0.1:5000/api/accept-case', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ screening_id: id })
+    });
+  } catch(e) { console.warn('فشل حفظ قبول الحالة في قاعدة البيانات:', e); }
+}
+
+function logout() { sessionStorage.clear(); window.location.href = 'index.html'; }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ══════════════════════════════════════════════════════
+// ── Init
+// ══════════════════════════════════════════════════════
+window.onload = async () => {
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  if (!user.email || user.role !== 'specialist') { window.location.href = 'index.html'; return; }
+
+  document.getElementById('sName').textContent   = user.name || 'المختص';
+  document.getElementById('sAvatar').textContent = (user.name || 'د')[0];
+
+  const savedLang = localStorage.getItem('preferred_lang') || 'ar';
+  setLanguage(savedLang);
+
+  if (user.name) {
+    document.getElementById('specWelcome').textContent = savedLang === 'ar'
+      ? `مرحباً ${user.name} 👨‍⚕️`
+      : `Welcome ${user.name} 👨‍⚕️`;
+  }
+
+  await loadCasesFromDB();
+  document.getElementById('langToggleBtn').addEventListener('click', toggleLanguage);
+};
+</script>
+</body>
+</html>

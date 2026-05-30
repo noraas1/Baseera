@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n="page_title">لوحة المدير — بصيرة</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  --teal-400:#1D9E75;--teal-100:#9FE1CB;--teal-600:#0F6E56;--teal-800:#085041;
+  --purple-400:#7F77DD;--coral-400:#D85A30;--amber-400:#EF9F27;
+  --red-400:#E24B4A;--red-600:#A32D2D;
+  --bg:#0D1117;--surface:#1A2235;--surface2:#1F2A3C;--surface3:#243045;
+  --border:rgba(255,255,255,0.07);--border-md:rgba(255,255,255,0.13);
+  --text:#F0EEE9;--text-2:#A0A8B8;--text-3:#606878;
+  --radius:10px;--radius-lg:14px;--radius-xl:20px;--radius-2xl:28px;
+  --shadow:0 2px 12px rgba(0,0,0,0.3);
+  --font:'Tajawal',system-ui,sans-serif;--font-mono:'Space Mono',monospace;
+  --accent:#1D9E75;--accent-dim:rgba(29,158,117,0.12);--glow:0 0 30px rgba(29,158,117,0.15);
+}
+
+body.light-mode {
+  --bg:#F4F6F9;--surface:#FFFFFF;--surface2:#F4F6F9;--surface3:#E9EDF2;
+  --border:rgba(0,0,0,0.07);--border-md:rgba(0,0,0,0.12);
+  --text:#0F172A;--text-2:#475569;--text-3:#94A3B8;
+  --accent-dim:rgba(29,158,117,0.08);--glow:0 0 30px rgba(29,158,117,0.12);
+}
+body.light-mode .topnav{background:rgba(255,255,255,0.88);border-bottom-color:rgba(0,0,0,0.08)}
+body.light-mode .metric,.body.light-mode .section-card,.body.light-mode .modal{background:#fff}
+body.light-mode input,body.light-mode select{background:#F8FAFC;color:#0F172A;border-color:rgba(0,0,0,0.15)}
+body.light-mode th{background:rgba(0,0,0,0.02)}
+body.light-mode tr:hover td{background:rgba(0,0,0,0.015)}
+body.light-mode .mm-bar-wrap{background:rgba(0,0,0,0.07)}
+body.light-mode .model-metric{background:var(--surface2)}
+body.light-mode .badge-teal{background:rgba(29,158,117,0.1);color:var(--teal-600);border-color:rgba(29,158,117,0.25)}
+body.light-mode .badge-red{background:rgba(162,45,45,0.08);color:var(--red-600);border-color:rgba(162,45,45,0.2)}
+body.light-mode .rb-admin{background:rgba(83,74,183,0.1);color:#534AB7}
+body.light-mode .rb-parent{background:rgba(29,158,117,0.1);color:var(--teal-600)}
+body.light-mode .rb-specialist{background:rgba(239,159,39,0.1);color:#BA7517}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{direction:rtl;transition:direction 0s}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;padding-top:68px;transition:background .3s,color .3s}
+
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(29,158,117,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,158,117,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 60% 20%,rgba(29,158,117,0.05) 0%,transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(83,74,183,0.04) 0%,transparent 50%);pointer-events:none;z-index:0;animation:bgPulse 12s ease-in-out infinite alternate}
+@keyframes bgPulse{from{opacity:.6}to{opacity:1}}
+
+/* ── NAVBAR ── */
+.topnav{background:rgba(13,17,23,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;height:68px;position:fixed;top:0;width:100%;z-index:200;animation:slideDownNav 0.6s cubic-bezier(0.16,1,0.3,1) forwards}
+@keyframes slideDownNav{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+
+.nav-left{display:flex;align-items:center;gap:16px}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-brand img{height:90px;width:auto;border-radius:8px}
+.nav-brand-text{font-weight:900;font-size:17px;color:var(--text);letter-spacing:-.3px}
+.nav-divider{width:1px;height:28px;background:var(--border-md)}
+.nav-user-area{display:flex;align-items:center;gap:10px}
+.nav-avatar{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;background:rgba(216,90,48,0.15);color:#F5C4B3;border:1px solid rgba(216,90,48,0.3)}
+.nav-user-info{display:flex;flex-direction:column}
+.nav-user-name{font-size:13px;font-weight:800;color:var(--text);line-height:1.3}
+.nav-user-role{font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.5px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.icon-btn{width:36px;height:36px;border-radius:50%;background:transparent;border:1px solid var(--border-md);color:var(--text-2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.icon-btn:hover{background:rgba(255,255,255,0.08);color:var(--text)}
+.lang-btn-text{font-size:12px;font-weight:800;font-family:var(--font)}
+.btn-logout{padding:7px 14px;font-size:12px;font-weight:800;border-radius:var(--radius);cursor:pointer;transition:all .2s;background:rgba(162,45,45,0.1);color:var(--red-400);border:1px solid rgba(162,45,45,0.2);font-family:var(--font)}
+.btn-logout:hover{background:rgba(162,45,45,0.2)}
+
+/* ── LAYOUT ── */
+.page{max-width:1200px;margin:0 auto;padding:2rem 1.75rem;position:relative;z-index:1}
+h1{font-size:26px;font-weight:900;letter-spacing:-.5px}
+h2{font-size:19px;font-weight:800}
+h3{font-size:15px;font-weight:700}
+.subtitle{font-size:14px;color:var(--text-2);margin-top:5px}
+
+/* ── METRICS ── */
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:2rem}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.5rem;box-shadow:var(--shadow);transition:transform .2s,border-color .2s}
+.metric:hover{transform:translateY(-2px);border-color:var(--border-md)}
+.metric-val{font-size:32px;font-weight:900;font-family:var(--font-mono);line-height:1}
+.metric-lbl{font-size:11px;font-weight:800;color:var(--text-3);margin-top:8px;text-transform:uppercase;letter-spacing:.5px}
+.metric.teal{border-color:rgba(29,158,117,0.2)} .metric.teal .metric-val{color:var(--teal-400)}
+.metric.purple{border-color:rgba(127,119,221,0.2)} .metric.purple .metric-val{color:var(--purple-400)}
+.metric.amber{border-color:rgba(239,159,39,0.2)} .metric.amber .metric-val{color:var(--amber-400)}
+.metric.coral{border-color:rgba(216,90,48,0.2)} .metric.coral .metric-val{color:var(--coral-400)}
+
+/* ── TABS ── */
+.tab-row{display:flex;gap:6px;border-bottom:1px solid var(--border);margin-bottom:2rem}
+.tab-btn{padding:10px 20px;background:none;border:none;color:var(--text-3);font-weight:800;cursor:pointer;border-bottom:2px solid transparent;font-family:var(--font);font-size:14px;transition:all .2s;margin-bottom:-1px}
+.tab-btn:hover{color:var(--text-2)}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-panel{display:none;animation:fadeUp .35s ease}
+.tab-panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── SECTION ── */
+.section-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:2rem;box-shadow:var(--shadow)}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+
+/* ── SEARCH ── */
+.search-bar{display:flex;gap:10px;margin-bottom:1.5rem;align-items:center;flex-wrap:wrap}
+.search-bar input,.search-bar select{padding:10px 14px;border:1px solid var(--border-md);border-radius:var(--radius);background:var(--surface2);color:var(--text);outline:none;font-family:var(--font);font-size:14px;transition:border-color .2s}
+.search-bar input{flex:1;min-width:200px;max-width:320px}
+.search-bar input:focus,.search-bar select:focus{border-color:var(--accent)}
+.search-bar select option{background:var(--surface)}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-lg)}
+table{width:100%;border-collapse:collapse}
+th{text-align:start;padding:13px 16px;font-size:11px;font-weight:800;color:var(--text-3);background:rgba(255,255,255,0.02);border-bottom:1px solid var(--border);white-space:nowrap;text-transform:uppercase;letter-spacing:.5px}
+td{padding:13px 16px;border-bottom:1px solid var(--border);font-size:14px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.02)}
+.td-name{font-weight:700;color:var(--text)}
+
+/* ── BADGES ── */
+.badge{padding:4px 11px;border-radius:20px;font-size:11px;font-weight:800;display:inline-block;white-space:nowrap;font-family:var(--font-mono);letter-spacing:.3px}
+.badge-teal{background:var(--accent-dim);color:var(--teal-100);border:1px solid rgba(29,158,117,0.3)}
+.badge-red{background:rgba(162,45,45,0.15);color:#F7C1C1;border:1px solid rgba(162,45,45,0.3)}
+.badge-amber{background:rgba(239,159,39,0.15);color:var(--amber-400);border:1px solid rgba(239,159,39,0.3)}
+.rb-admin{background:rgba(83,74,183,0.15);color:#CECBF6;border:1px solid rgba(83,74,183,0.3)}
+.rb-parent{background:var(--accent-dim);color:var(--teal-100);border:1px solid rgba(29,158,117,0.3)}
+.rb-specialist{background:rgba(239,159,39,0.15);color:var(--amber-400);border:1px solid rgba(239,159,39,0.3)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 20px;border-radius:var(--radius);font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer;border:none;transition:all .2s}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 16px rgba(29,158,117,0.3)}
+.btn-primary:hover{background:var(--teal-800)}
+.btn-sm{padding:6px 14px;font-size:12px}
+.btn-full{width:100%}
+.action-btn{cursor:pointer;background:rgba(162,45,45,0.1);border:1px solid rgba(162,45,45,0.2);font-size:12px;color:var(--red-400);padding:6px 14px;border-radius:var(--radius);transition:all .15s;font-weight:800;font-family:var(--font)}
+.action-btn:hover{background:rgba(162,45,45,0.2)}
+.debug-btn{background:rgba(255,255,255,0.04);border:1px solid var(--border-md);color:var(--text-3);font-size:11px;padding:5px 12px;border-radius:var(--radius);cursor:pointer;font-family:var(--font);font-weight:700;transition:all .2s}
+.debug-btn:hover{color:var(--text-2);border-color:var(--border-md)}
+
+/* ── FORMS ── */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-group label{display:block;font-size:12px;font-weight:800;color:var(--text-3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.form-group input,.form-group select{width:100%;padding:10px 14px;border:1px solid var(--border-md);border-radius:var(--radius);background:var(--surface2);color:var(--text);outline:none;font-family:var(--font);font-size:14px;transition:border-color .2s}
+.form-group input:focus,.form-group select:focus{border-color:var(--accent)}
+.form-group select option{background:var(--surface)}
+
+/* ── MODEL ── */
+.model-metric{background:var(--surface2);border:1px solid var(--border-md);border-radius:var(--radius);padding:14px 18px;display:flex;align-items:center;gap:16px;margin-bottom:10px}
+.mm-label{font-size:13px;font-weight:800;color:var(--text);min-width:200px;font-family:var(--font-mono)}
+.mm-val{font-size:18px;font-weight:900;color:var(--teal-400);font-family:var(--font-mono);min-width:70px;text-align:end}
+.mm-bar-wrap{flex:1;background:rgba(255,255,255,0.06);border-radius:100px;height:8px;overflow:hidden}
+.mm-bar{height:100%;border-radius:100px;background:var(--accent)}
+.alert-info{background:var(--accent-dim);color:var(--teal-100);border-inline-start:3px solid var(--accent);padding:14px 18px;border-radius:var(--radius);font-size:13px;font-weight:700;margin-bottom:1.5rem}
+
+/* ── MISC ── */
+.hidden{display:none!important}
+.empty{text-align:center;padding:3rem;color:var(--text-3);font-weight:700;font-size:15px}
+.empty-icon{font-size:36px;margin-bottom:.75rem;opacity:.5;display:block}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border-md);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-cell{text-align:center;padding:2.5rem;color:var(--text-3);font-weight:700}
+.error-banner{background:rgba(162,45,45,0.1);color:var(--red-400);border:1px solid rgba(162,45,45,0.2);border-radius:var(--radius);padding:12px 16px;font-size:13px;font-weight:700;margin-bottom:1.5rem;display:none}
+
+/* ── MODAL ── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:1;transition:opacity .25s}
+.modal-bg.hidden{opacity:0;pointer-events:none}
+.modal{background:var(--surface);padding:2.5rem;border-radius:var(--radius-2xl);width:90%;max-width:500px;box-shadow:0 20px 60px rgba(0,0,0,0.4),var(--glow);border:1px solid var(--border-md);transition:transform .25s}
+.modal-bg.hidden .modal{transform:translateY(30px)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem}
+.modal-title{font-size:18px;font-weight:900}
+.close-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border-md);background:rgba(255,255,255,0.05);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--text-2);transition:all .15s}
+.close-btn:hover{background:rgba(162,45,45,0.2);color:var(--red-400);border-color:rgba(162,45,45,0.3)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface3);color:var(--text);padding:12px 24px;border-radius:100px;font-size:14px;font-weight:800;opacity:0;transition:all .3s;z-index:500;box-shadow:var(--shadow);border:1px solid var(--border-md);white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:760px){.grid-4{grid-template-columns:1fr 1fr}.nav-user-info,.nav-divider{display:none}.page{padding:1.5rem 1rem}
+  #tab-analytics>div:first-child{grid-template-columns:1fr !important}
+  #tab-analytics>div:last-child{grid-template-columns:1fr !important}
+}
+@media(max-width:480px){.grid-4{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}}
+
+/* ══════════════════════════════════════════════
+   LTR FLIP — تنعكس الصفحة كلها عند الإنجليزية
+   ══════════════════════════════════════════════ */
+
+/* إعادة ترتيب الـ nav: اللوجو يصير يسار، الأدوات يمين */
+html[dir="ltr"] .topnav { flex-direction: row; }
+html[dir="ltr"] .nav-left { flex-direction: row; }
+html[dir="ltr"] .nav-right { flex-direction: row; }
+
+/* model metric: label يصير يسار، قيمة يمين */
+html[dir="ltr"] .mm-label { text-align: left; }
+html[dir="ltr"] .mm-val   { text-align: right; }
+
+/* tabs: تبدأ من اليسار */
+html[dir="ltr"] .tab-row { justify-content: flex-start; }
+
+/* modal header: X يصير يسار */
+html[dir="ltr"] .modal-header { flex-direction: row; }
+
+/* section-header: زر الإضافة يصير يسار */
+html[dir="ltr"] .section-header { flex-direction: row; }
+
+/* search bar */
+html[dir="ltr"] .search-bar { flex-direction: row; }
+
+/* inputs & selects: النص من اليسار */
+html[dir="ltr"] input,
+html[dir="ltr"] select { text-align: left; direction: ltr; }
+
+/* table headers: محاذاة من اليسار */
+html[dir="ltr"] th { text-align: left; }
+html[dir="ltr"] td { text-align: left; }
+
+/* nav user info: النص من اليسار */
+html[dir="ltr"] .nav-user-info { align-items: flex-start; }
+
+/* status dot margin */
+html[dir="ltr"] .status-dot { margin-left: 0; margin-right: 6px; }
+
+/* toast يتمركز صح */
+html[dir="ltr"] .toast { left: 50%; right: auto; }
+
+/* analytics legend */
+html[dir="ltr"] #donutLegend { flex-direction: row; }
+
+/* weekly chart */
+html[dir="ltr"] #weeklyChart { flex-direction: row; }
+html[dir="ltr"] #weeklyLabels { flex-direction: row; }
+
+/* smooth dir transition */
+html { transition: all 0.3s ease; }
+.topnav, .page, .modal { transition: all 0.3s ease; }
+
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-left">
+    <a href="index.html" class="nav-brand">
+      <img src="logo.png" alt="بصيرة" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <span class="nav-brand-text" style="display:none">بصيرة</span>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-user-area">
+      <div class="nav-avatar" id="adminAvatar">م</div>
+      <div class="nav-user-info">
+        <span class="nav-user-name" id="adminName">المدير</span>
+        <span class="nav-user-role">Administrator</span>
+      </div>
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="icon-btn" id="themeBtn" title="تبديل الثيم"><span id="themeIcon">🌙</span></button>
+    <button class="icon-btn" id="langBtn"><span class="lang-btn-text" id="langText">EN</span></button>
+    <button class="btn-logout" onclick="logout()" data-i18n="logout_btn">خروج</button>
+  </div>
+</nav>
+
+<div class="page">
+  <div style="margin-bottom:2rem">
+    <h1 data-i18n="page_heading">لوحة المدير</h1>
+    <p class="subtitle" data-i18n="subtitle">إدارة الحسابات وعرض إحصائيات النظام</p>
+  </div>
+
+  <div class="error-banner" id="errorBanner"></div>
+
+  <div class="grid-4">
+    <div class="metric teal"><div class="metric-val" id="mTotal">—</div><div class="metric-lbl" data-i18n="metric_total">إجمالي الفحوصات</div></div>
+    <div class="metric purple"><div class="metric-val" id="mUsers">—</div><div class="metric-lbl" data-i18n="metric_parents">ولي الأمر</div></div>
+    <div class="metric amber"><div class="metric-val" id="mDocs">—</div><div class="metric-lbl" data-i18n="metric_specialists">المختصين</div></div>
+    <div class="metric coral"><div class="metric-val" id="mRisk">—</div><div class="metric-lbl" data-i18n="metric_high_risk">خطر عالي</div></div>
+  </div>
+
+  <div class="tab-row">
+    <button class="tab-btn active" onclick="switchTab('accounts',this)" data-i18n="tab_accounts">الحسابات</button>
+    <button class="tab-btn" onclick="switchTab('screenings',this)" data-i18n="tab_screenings">الفحوصات</button>
+    <button class="tab-btn" onclick="switchTab('analytics',this);renderAnalytics()" data-i18n="tab_analytics">📊 التحليلات</button>
+    <button class="tab-btn" onclick="switchTab('model',this)" data-i18n="tab_model">أداء الموديل</button>
+  </div>
+
+  <!-- TAB: Accounts -->
+  <div class="section-card tab-panel active" id="tab-accounts">
+    <div class="section-header">
+      <h2 data-i18n="accounts_title">جميع الحسابات</h2>
+      <button class="btn btn-primary btn-sm" onclick="openAddModal()" data-i18n="add_account_btn">+ إضافة حساب</button>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="ابحث بالاسم أو البريد..." oninput="filterTable()" data-i18n-placeholder="search_placeholder">
+      <select id="roleFilter" onchange="filterTable()" style="max-width:160px">
+        <option value="" data-i18n="filter_all_roles">كل الأدوار</option>
+        <option value="parent" data-i18n="filter_parent">ولي الأمر</option>
+        <option value="specialist" data-i18n="filter_specialist">مختص</option>
+        <option value="admin" data-i18n="filter_admin">مدير</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>#</th>
+          <th data-i18n="th_name">الاسم</th>
+          <th data-i18n="th_email">البريد</th>
+          <th data-i18n="th_role">الدور</th>
+          <th data-i18n="th_specialty">التخصص</th>
+          <th data-i18n="th_created">تاريخ الإنشاء</th>
+          <th data-i18n="th_action">إجراء</th>
+        </tr></thead>
+        <tbody id="accountsBody">
+          <tr><td colspan="7" class="loading-cell"><span class="spinner"></span> جاري التحميل...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: Screenings -->
+  <div class="section-card tab-panel" id="tab-screenings">
+    <div class="section-header">
+      <h2 data-i18n="screenings_title">جميع الفحوصات</h2>
+      <button class="debug-btn" onclick="debugScreenings()">🔍 فحص البيانات</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>#</th>
+          <th data-i18n="th_child_name">اسم الطفل</th>
+          <th data-i18n="th_parent_name">ولي الأمر</th>
+          <th data-i18n="th_age">العمر</th>
+          <th data-i18n="th_result">التصنيف</th>
+          <th data-i18n="th_risk">مستوى الخطر</th>
+          <th data-i18n="th_confidence">الثقة</th>
+          <th data-i18n="th_doctor">الطبيب</th>
+          <th data-i18n="th_date">التاريخ</th>
+        </tr></thead>
+        <tbody id="screeningsBody">
+          <tr><td colspan="9" class="loading-cell"><span class="spinner"></span> جاري التحميل...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: Analytics -->
+  <div class="tab-panel" id="tab-analytics">
+
+    <!-- Row 1: Donut + Weekly bars -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
+
+      <!-- Donut: توزيع مستويات الخطر -->
+      <div class="section-card" style="display:flex;flex-direction:column;align-items:center;gap:1.5rem">
+        <h3 data-i18n="chart_risk_title" style="align-self:flex-start">توزيع مستويات الخطر</h3>
+        <svg id="donutChart" width="200" height="200" viewBox="0 0 200 200"></svg>
+        <div id="donutLegend" style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center"></div>
+      </div>
+
+      <!-- Bar: الفحوصات آخر 7 أيام -->
+      <div class="section-card">
+        <h3 data-i18n="chart_weekly_title" style="margin-bottom:1.5rem">الفحوصات آخر 7 أيام</h3>
+        <div id="weeklyChart" style="display:flex;align-items:flex-end;gap:10px;height:160px;padding:0 4px"></div>
+        <div id="weeklyLabels" style="display:flex;gap:10px;margin-top:8px;padding:0 4px"></div>
+      </div>
+    </div>
+
+    <!-- Row 2: Doctor acceptance horizontal bars -->
+    <div class="section-card">
+      <h3 data-i18n="chart_doctors_title" style="margin-bottom:1.5rem">نسبة قبول الأطباء للحالات</h3>
+      <div id="doctorBars"></div>
+    </div>
+
+    <!-- Row 3: Summary cards -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px">
+      <div class="section-card" style="text-align:center">
+        <div id="statAvgAge" style="font-size:32px;font-weight:900;font-family:var(--font-mono);color:var(--teal-400)">—</div>
+        <div style="font-size:12px;font-weight:800;color:var(--text-3);margin-top:8px;text-transform:uppercase;letter-spacing:.5px" data-i18n="stat_avg_age">متوسط عمر الأطفال</div>
+      </div>
+      <div class="section-card" style="text-align:center">
+        <div id="statRiskRate" style="font-size:32px;font-weight:900;font-family:var(--font-mono);color:var(--coral-400)">—</div>
+        <div style="font-size:12px;font-weight:800;color:var(--text-3);margin-top:8px;text-transform:uppercase;letter-spacing:.5px" data-i18n="stat_risk_rate">نسبة حالات الخطر</div>
+      </div>
+      <div class="section-card" style="text-align:center">
+        <div id="statAcceptRate" style="font-size:32px;font-weight:900;font-family:var(--font-mono);color:var(--purple-400)">—</div>
+        <div style="font-size:12px;font-weight:800;color:var(--text-3);margin-top:8px;text-transform:uppercase;letter-spacing:.5px" data-i18n="stat_accept_rate">نسبة القبول الكلية</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Model -->
+  <div class="section-card tab-panel" id="tab-model">
+    <h2 style="margin-bottom:1.5rem" data-i18n="model_title">أداء نموذج Random Forest</h2>
+    <div class="alert-info" data-i18n="model_info">الموديل مدرّب على 1054 حالة حقيقية من داتاسيت Q-CHAT-10 — الفحص الرسمي لتوحد الأطفال</div>
+    <div id="modelMetrics"></div>
+    <div style="height:1px;background:var(--border-md);margin:2rem 0"></div>
+    <h3 style="margin-bottom:1.25rem" data-i18n="feature_importance_title">أهمية الأسئلة (Feature Importance)</h3>
+    <div id="featureImportance"></div>
+  </div>
+</div>
+
+<!-- Add Account Modal -->
+<div class="modal-bg hidden" id="addModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" data-i18n="modal_title">إضافة حساب جديد</span>
+      <button class="close-btn" onclick="closeModal()">×</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label data-i18n="modal_full_name">الاسم الكامل</label><input type="text" id="newName" placeholder="الاسم الكامل"></div>
+      <div class="form-group"><label data-i18n="modal_email">البريد الإلكتروني</label><input type="email" id="newEmail" placeholder="email@example.com"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label data-i18n="modal_password">كلمة المرور</label><input type="password" id="newPass" placeholder="••••••••"></div>
+      <div class="form-group"><label data-i18n="modal_role">الدور</label>
+        <select id="newRole" onchange="toggleSpecialty()">
+          <option value="parent" data-i18n="role_parent_opt">ولي الأمر</option>
+          <option value="specialist" data-i18n="role_specialist_opt">مختص</option>
+          <option value="admin" data-i18n="role_admin_opt">مدير</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" id="specialtyGroup" style="display:none">
+      <label data-i18n="modal_specialty">التخصص</label>
+      <input type="text" id="newSpecialty" placeholder="طب الأعصاب، علم النفس...">
+    </div>
+    <button class="btn btn-primary btn-full" style="margin-top:1rem" onclick="addAccount()" data-i18n="modal_add_btn">إضافة الحساب</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// ── Config & State
+// ══════════════════════════════════════════════════════
+const API = 'http://localhost:5000';
+let accounts = [], screenings = [], filteredAccounts = [], currentLang = 'ar';
+
+// ══════════════════════════════════════════════════════
+// ── extractPred (Full logic from File 5)
+// Handles 4 different Supabase response shapes
+// ══════════════════════════════════════════════════════
+function extractPred(s) {
+  if (Array.isArray(s.predictions) && s.predictions.length > 0) return s.predictions[0];
+  if (s.prediction && typeof s.prediction === 'object' && s.prediction.result) return s.prediction;
+  if (s.result) return { result: s.result, risk_level: s.risk_level, confidence: s.confidence };
+  return { result: null, risk_level: null, confidence: null };
+}
+
+function calcRiskFromScore(score) {
+  if (score == null) return null;
+  return score >= 7 ? 'high' : score >= 4 ? 'medium' : 'low';
+}
+
+// ══════════════════════════════════════════════════════
+// ── Model Data (Static)
+// ══════════════════════════════════════════════════════
+const modelData = {
+  metrics: { accuracy: 0.9668, precision: 0.9860, recall: 0.9658, f1: 0.9758, roc_auc: 0.9954 },
+  features: {
+    A9: 0.1527, A6: 0.1506, A5: 0.1349, A7: 0.1312,
+    A2: 0.0996, A1: 0.0877, A4: 0.0689, A8: 0.0494,
+    A3: 0.0461, Age_Mons: 0.0323, A10: 0.0222,
+    Jaundice: 0.0110, Sex: 0.0074, Family: 0.0061
+  }
+};
+
+// ══════════════════════════════════════════════════════
+// ── Translations
+// ══════════════════════════════════════════════════════
+const TR = {
+  ar: {
+    page_title: "لوحة المدير — بصيرة", brand: "بصيرة",
+    logout_btn: "خروج", page_heading: "لوحة المدير",
+    subtitle: "إدارة الحسابات وعرض إحصائيات النظام",
+    metric_total: "إجمالي الفحوصات", metric_parents: "ولي الأمر",
+    metric_specialists: "المختصين", metric_high_risk: "خطر عالي",
+    tab_accounts: "الحسابات", tab_screenings: "الفحوصات", tab_model: "أداء الموديل",
+    accounts_title: "جميع الحسابات", add_account_btn: "+ إضافة حساب",
+    search_placeholder: "ابحث بالاسم أو البريد...",
+    filter_all_roles: "كل الأدوار", filter_parent: "ولي الأمر", filter_specialist: "مختص", filter_admin: "مدير",
+    th_name: "الاسم", th_email: "البريد", th_role: "الدور", th_specialty: "التخصص",
+    th_created: "تاريخ الإنشاء", th_action: "إجراء",
+    screenings_title: "جميع الفحوصات", th_child_name: "اسم الطفل", th_parent_name: "ولي الأمر",
+    th_age: "العمر", th_result: "التصنيف", th_risk: "مستوى الخطر",
+    th_confidence: "الثقة", th_doctor: "الطبيب", th_date: "التاريخ",
+    model_title: "أداء نموذج Random Forest",
+    model_info: "الموديل مدرّب على 1054 حالة حقيقية من داتاسيت Q-CHAT-10 — الفحص الرسمي لتوحد الأطفال",
+    feature_importance_title: "أهمية الأسئلة (Feature Importance)",
+    modal_title: "إضافة حساب جديد", modal_full_name: "الاسم الكامل",
+    modal_email: "البريد الإلكتروني", modal_password: "كلمة المرور", modal_role: "الدور",
+    role_parent_opt: "ولي الأمر", role_specialist_opt: "مختص", role_admin_opt: "مدير",
+    modal_specialty: "التخصص", modal_add_btn: "إضافة الحساب",
+    no_accounts: "لا توجد حسابات", no_screenings: "لا توجد فحوصات",
+    confirm_delete: "هل تريد حذف هذا الحساب؟",
+    account_deleted: "✓ تم حذف الحساب", account_added: "✓ تم إضافة الحساب",
+    fill_fields: "أدخل الاسم والبريد وكلمة المرور",
+    risk_high: "عالي", risk_medium: "متوسط", risk_low: "منخفض",
+    result_at_risk: "خطر", result_safe: "آمن",
+    metric_accuracy: "Accuracy — الدقة الكلية", metric_precision: "Precision — الدقة الإيجابية",
+    metric_recall: "Recall — الاستدعاء", metric_f1: "F1-Score — التوازن", metric_roc: "ROC-AUC — المنحنى",
+    api_error: "تعذّر الاتصال بالخادم. تأكد أن Flask يعمل على المنفذ 5000.",
+    months: "شهر", na: "—",
+    tab_analytics: "📊 التحليلات",
+    chart_risk_title: "توزيع مستويات الخطر",
+    chart_weekly_title: "الفحوصات آخر 7 أيام",
+    chart_doctors_title: "نسبة قبول الأطباء للحالات",
+    stat_avg_age: "متوسط عمر الأطفال",
+    stat_risk_rate: "نسبة حالات الخطر",
+    stat_accept_rate: "نسبة القبول الكلية",
+    no_data_yet: "لا توجد بيانات كافية بعد",
+    legend_high: "خطر عالي", legend_medium: "متوسط", legend_low: "منخفض"
+  },
+  en: {
+    page_title: "Admin Dashboard — Baseera", brand: "Baseera",
+    logout_btn: "Logout", page_heading: "Admin Dashboard",
+    subtitle: "Manage accounts and view system statistics",
+    metric_total: "Total Screenings", metric_parents: "Parents",
+    metric_specialists: "Specialists", metric_high_risk: "High Risk",
+    tab_accounts: "Accounts", tab_screenings: "Screenings", tab_model: "Model",
+    accounts_title: "All Accounts", add_account_btn: "+ Add Account",
+    search_placeholder: "Search by name or email...",
+    filter_all_roles: "All Roles", filter_parent: "Parent", filter_specialist: "Specialist", filter_admin: "Admin",
+    th_name: "Name", th_email: "Email", th_role: "Role", th_specialty: "Specialty",
+    th_created: "Created", th_action: "Action",
+    screenings_title: "All Screenings", th_child_name: "Child", th_parent_name: "Parent",
+    th_age: "Age", th_result: "Result", th_risk: "Risk",
+    th_confidence: "Confidence", th_doctor: "Doctor", th_date: "Date",
+    model_title: "Random Forest Model Performance",
+    model_info: "Model trained on 1,054 real cases from Q-CHAT-10 dataset.",
+    feature_importance_title: "Feature Importance",
+    modal_title: "Add New Account", modal_full_name: "Full Name",
+    modal_email: "Email", modal_password: "Password", modal_role: "Role",
+    role_parent_opt: "Parent", role_specialist_opt: "Specialist", role_admin_opt: "Admin",
+    modal_specialty: "Specialty", modal_add_btn: "Add Account",
+    no_accounts: "No accounts", no_screenings: "No screenings",
+    confirm_delete: "Delete this account?",
+    account_deleted: "✓ Account deleted", account_added: "✓ Account added",
+    fill_fields: "Please fill all required fields",
+    risk_high: "High", risk_medium: "Medium", risk_low: "Low",
+    result_at_risk: "At Risk", result_safe: "Safe",
+    metric_accuracy: "Accuracy", metric_precision: "Precision",
+    metric_recall: "Recall", metric_f1: "F1-Score", metric_roc: "ROC-AUC",
+    api_error: "Cannot connect to server. Make sure Flask is running on port 5000.",
+    months: "mo", na: "—",
+    tab_analytics: "📊 Analytics",
+    chart_risk_title: "Risk Level Distribution",
+    chart_weekly_title: "Screenings — Last 7 Days",
+    chart_doctors_title: "Doctor Case Acceptance Rate",
+    stat_avg_age: "Avg Child Age",
+    stat_risk_rate: "Risk Case Rate",
+    stat_accept_rate: "Overall Accept Rate",
+    no_data_yet: "Not enough data yet",
+    legend_high: "High Risk", legend_medium: "Medium", legend_low: "Low"
+  }
+};
+const t = k => TR[currentLang][k] ?? k;
+
+// ══════════════════════════════════════════════════════
+// ── Theme
+// ══════════════════════════════════════════════════════
+const themeBtn  = document.getElementById('themeBtn');
+const themeIcon = document.getElementById('themeIcon');
+function applyTheme(isLight) { document.body.classList.toggle('light-mode', isLight); themeIcon.textContent = isLight ? '🌙' : '☀️'; }
+applyTheme(localStorage.getItem('theme') === 'light');
+themeBtn.addEventListener('click', () => {
+  const g = !document.body.classList.contains('light-mode');
+  localStorage.setItem('theme', g ? 'light' : 'dark');
+  applyTheme(g);
+});
+
+// ══════════════════════════════════════════════════════
+// ── Language
+// ══════════════════════════════════════════════════════
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('preferred_lang', lang);
+  const isRTL = lang === 'ar';
+  document.documentElement.setAttribute('lang', lang);
+  document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+  document.body.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+  // flip inputs/selects direction individually
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.style.direction = isRTL ? 'rtl' : 'ltr';
+    el.style.textAlign = isRTL ? 'right' : 'left';
+  });
+  document.getElementById('langText').textContent = isRTL ? 'EN' : 'AR';
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (TR[lang]?.[k]) {
+      if (el.tagName === 'INPUT' && el.hasAttribute('data-i18n-placeholder')) el.placeholder = TR[lang][k];
+      else el.innerHTML = TR[lang][k];
+    }
+  });
+  document.querySelectorAll('select option[data-i18n]').forEach(opt => {
+    const k = opt.getAttribute('data-i18n');
+    if (k && TR[lang]?.[k]) opt.textContent = TR[lang][k];
+  });
+  renderAccounts(filteredAccounts);
+  renderScreenings();
+  renderModel();
+  // إعادة رسم التحليلات إذا كان التاب مفتوح
+  if (document.getElementById('tab-analytics')?.classList.contains('active')) renderAnalytics();
+}
+document.getElementById('langBtn').addEventListener('click', () => setLanguage(currentLang === 'ar' ? 'en' : 'ar'));
+
+// ══════════════════════════════════════════════════════
+// ── API Helpers
+// ══════════════════════════════════════════════════════
+async function apiFetch(path, opts = {}) {
+  const res = await fetch(API + path, { headers: { 'Content-Type': 'application/json' }, ...opts });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  return data;
+}
+function showError(msg) {
+  const el = document.getElementById('errorBanner');
+  el.textContent = msg; el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 7000);
+}
+
+// ══════════════════════════════════════════════════════
+// ── Loaders
+// ══════════════════════════════════════════════════════
+async function loadStats() {
+  try {
+    const d = await apiFetch('/api/stats');
+    document.getElementById('mTotal').textContent = d.total_screenings ?? '—';
+    document.getElementById('mUsers').textContent  = d.total_parents   ?? '—';
+    document.getElementById('mDocs').textContent   = d.total_doctors   ?? '—';
+    document.getElementById('mRisk').textContent   = d.at_risk         ?? '—';
+    if (d.model_metrics) { modelData.metrics = d.model_metrics; renderModel(); }
+  } catch(e) { showError(t('api_error')); }
+}
+
+async function loadAccounts() {
+  try {
+    accounts = await apiFetch('/api/users');
+    filteredAccounts = accounts;
+    renderAccounts(accounts);
+  } catch(e) {
+    document.getElementById('accountsBody').innerHTML =
+      `<tr><td colspan="7" class="loading-cell" style="color:var(--red-400)">⚠ ${t('api_error')}</td></tr>`;
+  }
+}
+
+async function loadScreenings() {
+  try {
+    screenings = await apiFetch('/api/admin/screenings');
+    renderScreenings();
+  } catch(e) {
+    document.getElementById('screeningsBody').innerHTML =
+      `<tr><td colspan="9" class="loading-cell" style="color:var(--red-400)">⚠ ${t('api_error')}</td></tr>`;
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// ── Render: Accounts
+// ══════════════════════════════════════════════════════
+function renderAccounts(list = accounts) {
+  filteredAccounts = list;
+  const tbody = document.getElementById('accountsBody');
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty"><span class="empty-icon">👤</span>${t('no_accounts')}</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = list.map((a, i) => `
+    <tr>
+      <td style="color:var(--text-3);font-family:var(--font-mono);font-weight:700">${i + 1}</td>
+      <td><div class="td-name">${a.name || '—'}</div></td>
+      <td style="font-size:13px;color:var(--text-2)">${a.email || '—'}</td>
+      <td><span class="badge ${roleClass(a.role)}">${roleLabel(a.role)}</span></td>
+      <td style="font-size:13px;color:var(--text-2)">${a.specialty || '—'}</td>
+      <td style="font-size:12px;color:var(--text-3)">${fmtDate(a.created_at)}</td>
+      <td>${a.role !== 'admin'
+        ? `<button class="action-btn" onclick="deleteAccount('${a.id}')">حذف</button>`
+        : '<span style="color:var(--text-3)">—</span>'}</td>
+    </tr>`).join('');
+}
+
+function roleClass(r) { return { admin: 'rb-admin', parent: 'rb-parent', specialist: 'rb-specialist' }[r] || 'badge-amber'; }
+function roleLabel(r) {
+  if (currentLang === 'en') return { admin: 'Admin', parent: 'Parent', specialist: 'Specialist' }[r] || r;
+  return { admin: 'مدير', parent: 'ولي أمر', specialist: 'مختص' }[r] || r;
+}
+function fmtDate(iso) { return iso ? iso.split('T')[0] : '—'; }
+
+function filterTable() {
+  const q    = document.getElementById('searchInput').value.toLowerCase();
+  const role = document.getElementById('roleFilter').value;
+  renderAccounts(accounts.filter(a =>
+    (a.name?.toLowerCase().includes(q) || a.email?.toLowerCase().includes(q)) &&
+    (role ? a.role === role : true)
+  ));
+}
+
+// ══════════════════════════════════════════════════════
+// ── Render: Screenings (Full fallback logic from File 5)
+// ══════════════════════════════════════════════════════
+function renderScreenings() {
+  const tbody = document.getElementById('screeningsBody');
+  if (!screenings.length) {
+    tbody.innerHTML = `<tr><td colspan="9"><div class="empty"><span class="empty-icon">📋</span>${t('no_screenings')}</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = screenings.map((s, i) => {
+    const pred = extractPred(s);
+    let result = pred.result;
+    let risk   = pred.risk_level;
+    let conf   = pred.confidence != null ? Math.round(pred.confidence * 100) + '%' : null;
+
+    // Fallback: حساب من total_score لو prediction فارغ
+    if (!result && s.total_score != null) result = s.total_score >= 4 ? 'at_risk' : 'not_at_risk';
+    if (!risk   && s.total_score != null) risk   = calcRiskFromScore(s.total_score);
+    if (!conf   && s.total_score != null) conf   = Math.min(95, 50 + s.total_score * 5) + '%*';
+
+    let resultBadge;
+    if      (result === 'at_risk')     resultBadge = `<span class="badge badge-red">${t('result_at_risk')}</span>`;
+    else if (result === 'not_at_risk') resultBadge = `<span class="badge badge-teal">${t('result_safe')}</span>`;
+    else                               resultBadge = `<span style="color:var(--text-3);font-size:12px">—</span>`;
+
+    let riskBadge;
+    if (risk) {
+      const cls = { high: 'badge-red', medium: 'badge-amber', low: 'badge-teal' }[risk] || '';
+      riskBadge = `<span class="badge ${cls}">${t('risk_' + risk) || risk}</span>`;
+    } else {
+      riskBadge = `<span style="color:var(--text-3);font-size:12px">—</span>`;
+    }
+
+    return `
+      <tr>
+        <td style="color:var(--text-3);font-family:var(--font-mono);font-weight:700">${i + 1}</td>
+        <td><div class="td-name">${s.child_name || '—'}</div></td>
+        <td style="font-size:13px;color:var(--text-2);font-weight:600">${s.user_name || s.user_email || '—'}</td>
+        <td style="font-size:13px;font-family:var(--font-mono)">${s.child_age_months ?? '—'} ${t('months')}</td>
+        <td>${resultBadge}</td>
+        <td>${riskBadge}</td>
+        <td style="font-size:13px;font-weight:700;font-family:var(--font-mono)">${conf || '—'}</td>
+        <td style="font-size:13px;color:var(--text-2)">${s.assigned_doctor_name || '—'}</td>
+        <td style="font-size:12px;color:var(--text-3)">${fmtDate(s.created_at)}</td>
+      </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// ── Render: Model
+// ══════════════════════════════════════════════════════
+function renderModel() {
+  const m = modelData.metrics;
+  document.getElementById('modelMetrics').innerHTML = [
+    [t('metric_accuracy'),  m.accuracy],
+    [t('metric_precision'), m.precision],
+    [t('metric_recall'),    m.recall],
+    [t('metric_f1'),        m.f1],
+    [t('metric_roc'),       m.roc_auc],
+  ].map(([label, val]) => `
+    <div class="model-metric">
+      <span class="mm-label">${label}</span>
+      <div class="mm-bar-wrap"><div class="mm-bar" style="width:${(val * 100).toFixed(1)}%"></div></div>
+      <span class="mm-val">${(val * 100).toFixed(2)}%</span>
+    </div>`).join('');
+
+  const fi  = modelData.features;
+  const max = Math.max(...Object.values(fi));
+  document.getElementById('featureImportance').innerHTML = Object.entries(fi)
+    .sort((a, b) => b[1] - a[1])
+    .map(([name, val]) => `
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <span style="width:80px;font-size:13px;font-weight:700;color:var(--text-2);font-family:var(--font-mono)">${name}</span>
+        <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:100px;height:8px;overflow:hidden">
+          <div style="width:${(val / max * 100).toFixed(1)}%;height:100%;background:var(--accent);border-radius:100px"></div>
+        </div>
+        <span style="width:46px;text-align:left;font-size:13px;font-weight:700;color:var(--text-3);font-family:var(--font-mono)">${(val * 100).toFixed(1)}%</span>
+      </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// ── Debug (from File 5)
+// ══════════════════════════════════════════════════════
+function debugScreenings() {
+  if (!screenings.length) { showToast('لا توجد بيانات بعد'); return; }
+  const s = screenings[0];
+  console.group('[DEBUG] أول screening record');
+  console.log('keys:', Object.keys(s));
+  console.log('predictions:', s.predictions);
+  console.log('prediction:', s.prediction);
+  console.log('result:', s.result);
+  console.log('risk_level:', s.risk_level);
+  console.log('total_score:', s.total_score);
+  console.log('full record:', s);
+  console.groupEnd();
+  showToast('✓ افتح الـ console (F12) لرؤية تفاصيل البيانات');
+}
+
+// ══════════════════════════════════════════════════════
+// ── Add / Delete Account
+// ══════════════════════════════════════════════════════
+async function addAccount() {
+  const name      = document.getElementById('newName').value.trim();
+  const email     = document.getElementById('newEmail').value.trim();
+  const password  = document.getElementById('newPass').value;
+  const role      = document.getElementById('newRole').value;
+  const specialty = document.getElementById('newSpecialty').value.trim();
+  if (!name || !email || !password) { showToast(t('fill_fields')); return; }
+  try {
+    await apiFetch('/api/register', {
+      method: 'POST',
+      body: JSON.stringify({ name, email, password, role, specialty: specialty || null })
+    });
+    closeModal();
+    showToast(t('account_added'));
+    await loadAccounts();
+    await loadStats();
+  } catch(e) { showToast('⚠ ' + e.message); }
+}
+
+async function deleteAccount(id) {
+  if (!confirm(t('confirm_delete'))) return;
+  try {
+    await apiFetch(`/api/users/${id}`, { method: 'DELETE' });
+    showToast(t('account_deleted'));
+    await loadAccounts();
+    await loadStats();
+  } catch(e) { showToast('⚠ ' + e.message); }
+}
+
+// ══════════════════════════════════════════════════════
+// ── Analytics / Charts (SVG — no external libraries)
+// ══════════════════════════════════════════════════════
+function renderAnalytics() {
+  if (!screenings.length) {
+    ['donutChart','weeklyChart','weeklyLabels','doctorBars'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = `<span style="color:var(--text-3);font-size:13px;font-weight:700">${t('no_data_yet')}</span>`;
+    });
+    return;
+  }
+
+  // ── 1. Donut Chart: توزيع مستويات الخطر ──────────────
+  const riskCounts = { high: 0, medium: 0, low: 0 };
+  screenings.forEach(s => {
+    const pred = extractPred(s);
+    let risk = pred.risk_level;
+    if (!risk && s.total_score != null) risk = calcRiskFromScore(s.total_score);
+    if (riskCounts[risk] !== undefined) riskCounts[risk]++;
+    else riskCounts.low++;
+  });
+  const total = screenings.length;
+  const colors  = { high: '#E24B4A', medium: '#EF9F27', low: '#1D9E75' };
+  const cx = 100, cy = 100, r = 72, strokeW = 28;
+  const circumference = 2 * Math.PI * r;
+  let offset = 0;
+  let arcs = '';
+  const order = ['high', 'medium', 'low'];
+  order.forEach(key => {
+    const pct   = riskCounts[key] / total;
+    const dash  = circumference * pct;
+    const gap   = circumference - dash;
+    // rotation: start from top (−90°), add previous offset
+    const rotate = -90 + (offset / circumference) * 360;
+    arcs += `<circle cx="${cx}" cy="${cy}" r="${r}"
+      fill="none" stroke="${colors[key]}" stroke-width="${strokeW}"
+      stroke-dasharray="${dash} ${gap}"
+      transform="rotate(${rotate} ${cx} ${cy})"
+      style="transition:stroke-dasharray .6s ease"/>`;
+    offset += dash;
+  });
+  // centre text
+  arcs += `<text x="${cx}" y="${cy - 8}" text-anchor="middle"
+    font-size="28" font-weight="900" fill="var(--text)" font-family="Space Mono,monospace">${total}</text>
+    <text x="${cx}" y="${cy + 14}" text-anchor="middle"
+    font-size="11" font-weight="700" fill="var(--text-3)">${currentLang === 'ar' ? 'فحص' : 'cases'}</text>`;
+  document.getElementById('donutChart').innerHTML = arcs;
+
+  // Legend
+  document.getElementById('donutLegend').innerHTML = order.map(key => `
+    <div style="display:flex;align-items:center;gap:6px">
+      <span style="width:10px;height:10px;border-radius:50%;background:${colors[key]};display:inline-block"></span>
+      <span style="font-size:12px;font-weight:700;color:var(--text-2)">${t('legend_' + key)}</span>
+      <span style="font-size:12px;font-weight:900;color:var(--text);font-family:var(--font-mono)">${riskCounts[key]}</span>
+    </div>`).join('');
+
+  // ── 2. Weekly Bar Chart: آخر 7 أيام ──────────────────
+  const dayMap = {};
+  const now = new Date();
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    dayMap[d.toISOString().split('T')[0]] = 0;
+  }
+  screenings.forEach(s => {
+    const day = (s.created_at || '').split('T')[0];
+    if (dayMap[day] !== undefined) dayMap[day]++;
+  });
+  const days   = Object.entries(dayMap);
+  const maxDay = Math.max(...days.map(([, v]) => v), 1);
+  const barW   = `calc(${100 / 7}% - 10px)`;
+
+  document.getElementById('weeklyChart').innerHTML = days.map(([date, count]) => {
+    const heightPct = (count / maxDay) * 100;
+    const isToday   = date === now.toISOString().split('T')[0];
+    return `
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%">
+        <span style="font-size:11px;font-weight:900;font-family:var(--font-mono);color:${count ? 'var(--teal-400)' : 'var(--text-3)'}">${count || ''}</span>
+        <div style="width:100%;height:${heightPct}%;background:${isToday ? 'var(--teal-400)' : 'rgba(29,158,117,0.35)'};border-radius:6px 6px 0 0;min-height:4px;transition:height .5s ease"></div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('weeklyLabels').innerHTML = days.map(([date]) => {
+    const d       = new Date(date);
+    const isToday = date === now.toISOString().split('T')[0];
+    const lbl     = currentLang === 'ar'
+      ? ['أحد','إثن','ثلا','أرب','خمي','جمع','سبت'][d.getDay()]
+      : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+    return `<div style="flex:1;text-align:center;font-size:11px;font-weight:${isToday?'900':'700'};color:${isToday?'var(--teal-400)':'var(--text-3)'}">${lbl}</div>`;
+  }).join('');
+
+  // ── 3. Doctor Acceptance Bars (horizontal) ───────────
+  const docStats = {};
+  screenings.forEach(s => {
+    const docName = s.assigned_doctor_name;
+    if (!docName || docName === '—') return;
+    if (!docStats[docName]) docStats[docName] = { total: 0, accepted: 0 };
+    docStats[docName].total++;
+    // نحسب "مقبول" إذا كان الفحص محال لطبيب (= مقبول ضمنياً)
+    docStats[docName].accepted++;
+  });
+
+  // أضف إجمالي كل طبيب من قائمة الحسابات كـ denominator
+  accounts.filter(a => a.role === 'specialist').forEach(doc => {
+    if (!docStats[doc.name]) docStats[doc.name] = { total: 0, accepted: 0 };
+  });
+
+  const docEntries = Object.entries(docStats);
+  if (!docEntries.length) {
+    document.getElementById('doctorBars').innerHTML =
+      `<p style="color:var(--text-3);font-size:13px;font-weight:700">${t('no_data_yet')}</p>`;
+  } else {
+    const maxDoc = Math.max(...docEntries.map(([, v]) => v.total), 1);
+    document.getElementById('doctorBars').innerHTML = docEntries
+      .sort((a, b) => b[1].total - a[1].total)
+      .map(([name, stat]) => {
+        const pct = Math.round((stat.total / maxDoc) * 100);
+        return `
+          <div style="margin-bottom:14px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:13px;font-weight:800;color:var(--text)">${name}</span>
+              <span style="font-size:12px;font-weight:900;font-family:var(--font-mono);color:var(--purple-400)">${stat.total} ${currentLang === 'ar' ? 'حالة' : 'cases'}</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.06);border-radius:100px;height:10px;overflow:hidden">
+              <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--purple-400),var(--teal-400));border-radius:100px;transition:width .6s ease"></div>
+            </div>
+          </div>`;
+      }).join('');
+  }
+
+  // ── 4. Summary stat cards ─────────────────────────────
+  // متوسط عمر الأطفال
+  const ages = screenings.map(s => s.child_age_months).filter(Boolean);
+  const avgAge = ages.length ? Math.round(ages.reduce((a, b) => a + b, 0) / ages.length) : 0;
+  document.getElementById('statAvgAge').textContent = avgAge ? `${avgAge} ${t('months')}` : '—';
+
+  // نسبة حالات الخطر
+  const atRiskCount = screenings.filter(s => {
+    const pred = extractPred(s);
+    const result = pred.result || (s.total_score >= 4 ? 'at_risk' : 'not_at_risk');
+    return result === 'at_risk';
+  }).length;
+  document.getElementById('statRiskRate').textContent = total ? `${Math.round(atRiskCount / total * 100)}%` : '—';
+
+  // نسبة القبول (الحالات عندها طبيب / إجمالي حالات خطر)
+  const withDoc    = screenings.filter(s => s.assigned_doctor_name && s.assigned_doctor_name !== '—').length;
+  document.getElementById('statAcceptRate').textContent = total ? `${Math.round(withDoc / total * 100)}%` : '—';
+}
+
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function openAddModal()   { document.getElementById('addModal').classList.remove('hidden'); }
+function closeModal()     { document.getElementById('addModal').classList.add('hidden'); }
+function toggleSpecialty() {
+  document.getElementById('specialtyGroup').style.display =
+    document.getElementById('newRole').value === 'specialist' ? 'block' : 'none';
+}
+function logout() { sessionStorage.clear(); window.location.href = 'index.html'; }
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ══════════════════════════════════════════════════════
+// ── Init
+// ══════════════════════════════════════════════════════
+window.onload = async () => {
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  if (!user.email || user.role !== 'admin') { window.location.href = 'index.html'; return; }
+
+  document.getElementById('adminName').textContent   = user.name || 'المدير';
+  document.getElementById('adminAvatar').textContent = (user.name || 'م')[0];
+
+  const savedLang = localStorage.getItem('preferred_lang') || 'ar';
+  setLanguage(savedLang);
+
+  renderModel(); // ثابت — يظهر فوراً
+
+  await Promise.all([loadStats(), loadAccounts(), loadScreenings()]);
+};
+</script>
+</body>
+</html>
