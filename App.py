@@ -123,11 +123,12 @@ def get_screening(screening_id):
         return jsonify({**screening, 'prediction': prediction})
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500    
+        return jsonify({'error': str(e)}), 500   
+     
 # ══════════════════════════════════════════════════════
 # ROUTE 1 — فحص الخادم + معلومات الموديل
 # ══════════════════════════════════════════════════════
-@app.route('/')
+@app.route('/api/health')
 def health():
     return jsonify({
         'status':   'Autism Screening API ✓',
@@ -643,3 +644,4 @@ def parent_page():
 @app.route('/specialist')
 def specialist_page():
     return render_template('Specialist.html')
+
