@@ -616,12 +616,6 @@ def admin_screenings():
         return jsonify({'error': str(e)}), 500
 
 
-
-from vercel_wsgi import handle
-app = handle(app)
-
-
-
     # =========================
 # WEB PAGES (FRONTEND)
 # =========================
@@ -644,4 +638,12 @@ def parent_page():
 @app.route('/specialist')
 def specialist_page():
     return render_template('Specialist.html')
+
+
+from vercel_wsgi import handle
+
+app = handle(app)
+
+if __name__ == "__main__":
+    app.run()
 
