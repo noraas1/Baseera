@@ -614,7 +614,6 @@ def admin_screenings():
         log.error("[ADMIN SCREENINGS] ✗ %s", e)
         return jsonify({'error': str(e)}), 500
 
-from vercel_wsgi import handle
 
 if __name__ == "__main__":
     app.run()

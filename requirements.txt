@@ -10,7 +10,7 @@ Werkzeug==3.0.3
 joblib==1.4.2
 numpy==1.26.4
 pandas==2.2.2
-scikit-learn==1.5.1
+scikit-learn==1.8.0
 #pip install -r requirements.txt
 
 
