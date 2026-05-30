@@ -616,5 +616,5 @@ def admin_screenings():
 
 from vercel_wsgi import handle
 
-def handler(environ, start_response):
-    return handle(app, environ, start_response)
+if __name__ == "__main__":
+    app.run()
