@@ -409,7 +409,7 @@ themeToggleBtn.addEventListener('click', () => {
   applyTheme(willBeLight);
 });
 
-const API_BASE = 'http://127.0.0.1:5000';
+const API_BASE = window.location.origin;
 const DEMO_ACCOUNTS = {
   'admin@system.com':  { password:'admin123',  role:'admin',      name:'المدير',       page:'admin.html' },
   'parent@email.com':   { password:'parent123', role:'parent',     name:'أحمد محمد',      page:'parent.html' },
@@ -571,3 +571,4 @@ document.getElementById('email').value='admin@system.com';
 </script>
 </body>
 </html>
+
