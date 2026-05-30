@@ -3,7 +3,7 @@ app.py — Flask Backend لنظام فحص التوحد
 تشغيل: python app.py
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from supabase import create_client
@@ -615,5 +615,31 @@ def admin_screenings():
         return jsonify({'error': str(e)}), 500
 
 
-if __name__ == "__main__":
-    app.run()
+
+from vercel_wsgi import handle
+app = handle(app)
+
+
+
+    # =========================
+# WEB PAGES (FRONTEND)
+# =========================
+
+@app.route('/')
+def home():
+    return render_template('Index.html')
+
+
+@app.route('/admin')
+def admin_page():
+    return render_template('Admin.html')
+
+
+@app.route('/parent')
+def parent_page():
+    return render_template('Parent.html')
+
+
+@app.route('/specialist')
+def specialist_page():
+    return render_template('Specialist.html')
