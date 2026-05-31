@@ -743,12 +743,18 @@ function prevQ() { if (currentQ > 0) showQuestion(currentQ - 1); }
 async function submitAssessment() {
   setStep(3);
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-  const payload = {
-    user_name: user.name || 'Parent',
-    user_email: user.email || 'parent@test.com',
-    ...childInfo,
-    answers: answers
-  };
+ const payload = {
+  user_name: user.name || 'Parent',
+  user_email: user.email || 'parent@test.com',
+
+  child_name: childInfo.child_name,
+  child_age_months: childInfo.child_age_months,
+  child_gender: childInfo.child_gender,
+  jaundice: childInfo.jaundice,
+  family_asd: childInfo.family_asd,
+
+  answers: answers
+};
   try {
     const res = await fetch(`${API_BASE}/api/predict`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },

@@ -231,58 +231,46 @@ def predict():
     log.info("[PREDICT] الموديل يقول:    pred=%d | proba=%s", int(pred), prob.round(4).tolist())
     log.info("[PREDICT] النتيجة النهائية: %s | ثقة: %.2f%% | خطر: %s", result, confidence * 100, risk_level)
     log.info("=" * 55)
-
+    ...
+    
     # ── Supabase
-    sc_id    = None
+    sc_id = None
     db_saved = False
+
     if supabase:
         try:
-            # ✅ الإصلاح: نستخدم الدالة الآمنة بدلاً من upsert المباشر
             user_id = get_or_create_user_id(body['user_name'], body['user_email'])
 
-            # تأكد أن الإجابات strings وليس أرقام
-            # خزّن الإجابات المشفّرة (0 و 1) وليس النصوص
             q_vals = {f'q{i+1}': answers[i] for i in range(10)}
+
             sc = supabase.table('screenings').insert({
-                'user_id':          user_id,
-                'child_name':       body['child_name'],
+                'user_id': user_id,
+                'child_name': body['child_name'],
                 'child_age_months': age_mons,
-                'child_gender':     body['child_gender'],
-                'jaundice':         body.get('jaundice', 'no'),
-                'family_asd':       body.get('family_asd', 'no'),
-                'total_score':      q_score,
+                'child_gender': body['child_gender'],
+                'jaundice': body.get('jaundice', 'no'),
+                'family_asd': body.get('family_asd', 'no'),
+                'total_score': q_score,
                 'acceptance_status': 'pending',
                 **q_vals
             }).execute()
-            sc_id = sc.data[0]['id']
+
+            if sc.data and len(sc.data) > 0:
+                sc_id = sc.data[0].get('id')
 
             supabase.table('predictions').insert({
                 'screening_id': sc_id,
-                'result':       result,
-                'risk_level':   risk_level,
-                'confidence':   confidence,
+                'result': result,
+                'risk_level': risk_level,
+                'confidence': confidence,
             }).execute()
+
             db_saved = True
-            log.info("[DB] ✓ محفوظ في Supabase | screening_id: %s", sc_id)
 
         except Exception as e:
-            log.error("[DB] ✗ خطأ في Supabase: %s", e)
-            return jsonify({'error': f'فشل الحفظ في قاعدة البيانات: {str(e)}'}), 500
+            log.error(e)
+            db_saved = False
 
-    return jsonify({
-        'source':         'random_forest_model',
-        'model_type':     type(model).__name__,
-        'screening_id':   sc_id,
-        'db_saved':       db_saved,
-        'result':         result,
-        'risk_level':     risk_level,
-        'confidence':     confidence,
-        'total_score':    q_score,
-        'max_score':      10,
-        'feature_vector': feature_vector
-    })
-
-#-----
 
 # ══════════════════════════════════════════════════════
 # ROUTE — التسجيل
@@ -640,4 +628,6 @@ def specialist_page():
     return render_template('Specialist.html')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
