@@ -1,5 +1,6 @@
 Flask==3.0.3
 flask-cors==4.0.1
+gunicorn
 
 supabase==2.15.3
 httpx==0.28.1
@@ -12,5 +13,4 @@ numpy==1.26.4
 pandas==2.2.2
 scikit-learn==1.8.0
 #pip install -r requirements.txt
-
 
