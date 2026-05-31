@@ -426,12 +426,12 @@ async function loadCasesFromDB() {
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
   if (!user.email) return;
   try {
-    const doctorRes = await fetch(`http://127.0.0.1:5000/api/doctors`);
+    const doctorRes = await fetch(`http:///api/doctors`);
     const doctors   = await doctorRes.json();
     const doctor    = doctors.find(d => d.email === user.email);
     if (!doctor) { console.warn('الدكتور غير موجود في DB'); return; }
 
-    const res  = await fetch(`http://127.0.0.1:5000/api/specialist/${doctor.id}/children`);
+    const res = await fetch(`${API_BASE}/api/specialist/${doctor.id}/children`);
     const data = await res.json();
     if (!Array.isArray(data)) return;
 
@@ -705,7 +705,7 @@ async function acceptCase(id) {
 
   // حفظ في DB في الخلفية
   try {
-    await fetch('http://127.0.0.1:5000/api/accept-case', {
+    await fetch(`${API_BASE}/api/accept-case`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ screening_id: id })

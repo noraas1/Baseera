@@ -429,7 +429,7 @@ html { transition: all 0.3s ease; }
 // ══════════════════════════════════════════════════════
 // ── Config & State
 // ══════════════════════════════════════════════════════
-const API = 'http://localhost:5000';
+const API = window.location.origin;
 let accounts = [], screenings = [], filteredAccounts = [], currentLang = 'ar';
 
 // ══════════════════════════════════════════════════════

@@ -436,7 +436,7 @@ themeToggleBtn.addEventListener('click', () => {
 // ══════════════════════════════════════════════════════
 // ── Constants
 // ══════════════════════════════════════════════════════
-const API_BASE = 'http://127.0.0.1:5000';
+const API_BASE = window.location.origin;
 
 const QUESTIONS = [
   { text: { ar: "هل يلتفت طفلك إليك عندما تناديه باسمه؟", en: "Does your child look at you when you call his/her name?" } },
@@ -736,7 +736,6 @@ function showQuestion(i) {
 function selectOpt(val) { answers[currentQ] = val; document.getElementById('nextBtn').disabled = false; showQuestion(currentQ); }
 function nextQ() { if (currentQ < 9) showQuestion(currentQ + 1); else submitAssessment(); }
 function prevQ() { if (currentQ > 0) showQuestion(currentQ - 1); }
-
 // ══════════════════════════════════════════════════════
 // ── Submit & Result
 // ══════════════════════════════════════════════════════
