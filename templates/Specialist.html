@@ -713,7 +713,7 @@ async function acceptCase(id) {
   } catch(e) { console.warn('فشل حفظ قبول الحالة في قاعدة البيانات:', e); }
 }
 
-function logout() { sessionStorage.clear(); window.location.href = 'index.html'; }
+function logout() { sessionStorage.clear(); window.location.href = 'https://baseera-febfgcm5k-nora-graduation-project.vercel.app/'; }
 
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -726,7 +726,7 @@ function showToast(msg) {
 // ══════════════════════════════════════════════════════
 window.onload = async () => {
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-  if (!user.email || user.role !== 'specialist') { window.location.href = 'index.html'; return; }
+  if (!user.email || user.role !== 'specialist') { window.location.href = '/'; return; }
 
   document.getElementById('sName').textContent   = user.name || 'المختص';
   document.getElementById('sAvatar').textContent = (user.name || 'د')[0];

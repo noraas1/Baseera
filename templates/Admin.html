@@ -982,7 +982,7 @@ function toggleSpecialty() {
   document.getElementById('specialtyGroup').style.display =
     document.getElementById('newRole').value === 'specialist' ? 'block' : 'none';
 }
-function logout() { sessionStorage.clear(); window.location.href = 'index.html'; }
+function logout() { sessionStorage.clear(); window.location.href = 'https://baseera-febfgcm5k-nora-graduation-project.vercel.app/'; }
 function showToast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg; el.classList.add('show');
@@ -994,7 +994,7 @@ function showToast(msg) {
 // ══════════════════════════════════════════════════════
 window.onload = async () => {
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-  if (!user.email || user.role !== 'admin') { window.location.href = 'index.html'; return; }
+  if (!user.email || user.role !== 'admin') { window.location.href = '/'; return; }
 
   document.getElementById('adminName').textContent   = user.name || 'المدير';
   document.getElementById('adminAvatar').textContent = (user.name || 'م')[0];

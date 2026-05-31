@@ -376,9 +376,9 @@ def login():
 
     # ── تحديد صفحة التوجيه
     redirect_map = {
-        'admin':      'admin.html',
-        'specialist': 'specialist.html',
-        'parent':     'parent.html'
+        'admin':      '/admin',
+        'specialist': '/specialist',
+        'parent':     '/parent'
     }
     redirect_page = redirect_map.get(user['role'], 'parent.html')
 

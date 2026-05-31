@@ -639,7 +639,7 @@ async function loadDoctors() {
 // ══════════════════════════════════════════════════════
 window.onload = async () => {
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-  if (!user.email || user.role !== 'parent') { window.location.href = 'index.html'; return; }
+  if (!user.email || user.role !== 'parent') { window.location.href = '/'; return; }
   document.getElementById('pName').textContent = user.name || 'ولي الأمر';
   document.getElementById('pAvatar').textContent = (user.name || 'أ')[0];
   const savedLang = localStorage.getItem('preferred_lang') || 'ar';
