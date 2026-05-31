@@ -252,6 +252,7 @@ def predict():
                 'family_asd': body.get('family_asd', 'no'),
                 'total_score': q_score,
                 'acceptance_status': 'pending',
+                'assigned_doctor_id': body.get('doctor_id'),
                 **q_vals
             }).execute()
 
@@ -631,3 +632,4 @@ def parent_page():
 @app.route('/specialist')
 def specialist_page():
     return render_template('Specialist.html')
+    

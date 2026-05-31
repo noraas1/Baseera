@@ -426,7 +426,7 @@ async function loadCasesFromDB() {
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
   if (!user.email) return;
   try {
-    const doctorRes = await fetch(`http:///api/doctors`);
+    const doctorRes = await fetch(`${API_BASE}/api/doctors`);
     const doctors   = await doctorRes.json();
     const doctor    = doctors.find(d => d.email === user.email);
     if (!doctor) { console.warn('الدكتور غير موجود في DB'); return; }
