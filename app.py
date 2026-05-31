@@ -623,22 +623,22 @@ def admin_screenings():
 
 @app.route('/')
 def home():
-    return render_template('Index.html')
+    return render_template('/Index')
 
 
 @app.route('/admin')
 def admin_page():
-    return render_template('Admin.html')
+    return render_template('/Admin')
 
 
 @app.route('/parent')
 def parent_page():
-    return render_template('Parent.html')
+    return render_template('/Parent')
 
 
 @app.route('/specialist')
 def specialist_page():
-    return render_template('Specialist.html')
+    return render_template('/Specialist')
 
 if __name__ == "__main__":
     import os
