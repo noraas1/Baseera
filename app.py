@@ -380,7 +380,7 @@ def login():
         'specialist': '/specialist',
         'parent':     '/parent'
     }
-    redirect_page = redirect_map.get(user['role'], 'parent.html')
+    redirect_page = redirect_map.get(user['role'], '/parent')
 
     log.info("[LOGIN] ✓ دخول ناجح: %s | role: %s", email, user['role'])
 

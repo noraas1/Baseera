@@ -411,9 +411,9 @@ themeToggleBtn.addEventListener('click', () => {
 
 const API_BASE = window.location.origin;
 const DEMO_ACCOUNTS = {
-  'admin@system.com':  { password:'admin123',  role:'admin',      name:'المدير',       page:'admin.html' },
-  'parent@email.com':   { password:'parent123', role:'parent',     name:'أحمد محمد',      page:'parent.html' },
-  'doctor@test.com':   { password:'doctor123', role:'specialist', name:'د. سارة العمري', page:'specialist.html' },
+  'admin@system.com':  { password:'admin123',  role:'admin',      name:'المدير',       page:'/admin' },
+  'parent@email.com': { password:'parent123', role:'parent',     name:'أحمد محمد',      page:'/parent' },
+  'doctor@test.com':  { password:'doctor123', role:'specialist', name:'د. سارة العمري', page:'/specialist' },
 };
 
 let selectedRole = 'admin';
