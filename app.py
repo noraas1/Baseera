@@ -616,31 +616,18 @@ def admin_screenings():
         log.error("[ADMIN SCREENINGS] ✗ %s", e)
         return jsonify({'error': str(e)}), 500
 
-
-    # =========================
-# WEB PAGES (FRONTEND)
-# =========================
-
 @app.route('/')
 def home():
-    return render_template('/Index')
-
+    return render_template('index.html')
 
 @app.route('/admin')
 def admin_page():
-    return render_template('/Admin')
-
+    return render_template('admin.html')
 
 @app.route('/parent')
 def parent_page():
-    return render_template('/Parent')
-
+    return render_template('parent.html')
 
 @app.route('/specialist')
 def specialist_page():
-    return render_template('/Specialist')
-
-if __name__ == "__main__":
-    import os
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    return render_template('specialist.html')
