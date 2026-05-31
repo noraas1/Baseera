@@ -270,19 +270,19 @@ def predict():
         except Exception as e:
             log.error(e)
             db_saved = False
-            
-            return jsonify({
-    'source': 'random_forest_model',
-    'model_type': type(model).__name__,
-    'screening_id': sc_id,
-    'db_saved': db_saved,
-    'result': result,
-    'risk_level': risk_level,
-    'confidence': confidence,
-    'total_score': q_score,
-    'max_score': 10,
-    'feature_vector': feature_vector
-})
+
+    return jsonify({
+        'source': 'random_forest_model',
+        'model_type': type(model).__name__,
+        'screening_id': sc_id,
+        'db_saved': db_saved,
+        'result': result,
+        'risk_level': risk_level,
+        'confidence': confidence,
+        'total_score': q_score,
+        'max_score': 10,
+        'feature_vector': feature_vector
+    })
 
 
 # ══════════════════════════════════════════════════════
