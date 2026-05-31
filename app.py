@@ -618,16 +618,16 @@ def admin_screenings():
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('Index.html')
 
 @app.route('/admin')
 def admin_page():
-    return render_template('admin.html')
+    return render_template('Admin.html')
 
 @app.route('/parent')
 def parent_page():
-    return render_template('parent.html')
+    return render_template('Parent.html')
 
 @app.route('/specialist')
 def specialist_page():
-    return render_template('specialist.html')
+    return render_template('Specialist.html')
