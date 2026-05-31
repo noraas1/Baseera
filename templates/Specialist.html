@@ -266,7 +266,7 @@ html[dir="ltr"] .toast { left: 50%; right: auto; }
 <nav class="topnav">
   <div class="nav-left-group">
     <a href="/" class="nav-brand">
-      <img src="logo.png" alt="بصيرة" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <img src="/static/logo.png" alt="بصيرة" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
       <span class="nav-brand-text" style="display:none">بصيرة</span>
     </a>
     <div class="nav-divider"></div>
@@ -713,7 +713,7 @@ async function acceptCase(id) {
   } catch(e) { console.warn('فشل حفظ قبول الحالة في قاعدة البيانات:', e); }
 }
 
-function logout() { sessionStorage.clear(); window.location.href = 'https://baseera-febfgcm5k-nora-graduation-project.vercel.app/'; }
+function logout() { sessionStorage.clear(); window.location.href ='/'; }
 
 function showToast(msg) {
   const t = document.getElementById('toast');
