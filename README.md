@@ -128,6 +128,7 @@ Used for training and evaluating the machine learning model.
 
 ## Project Structure
 
+```text
 Baseera/
 │
 ├── app.py
@@ -150,8 +151,8 @@ Baseera/
 ├── Train_model.py
 ├── verify_model.py
 │
-└── Toddler Autism Dataset July 2018 (1).csv── Toddler Autism Dataset July 2018 (1).csv
-
+└── Toddler Autism Dataset July 2018 (1).csv
+```
 ---
 
 ## API Endpoints
