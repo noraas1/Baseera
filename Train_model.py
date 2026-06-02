@@ -56,14 +56,15 @@ X_train, X_test, y_train, y_test = train_test_split(
 print(f"\n  Train: {len(X_train)} | Test: {len(X_test)}")
 
 # ══════════════════════════════════════════════════════
-# 4. بناء Random Forest
+# 4.  Random Forest
 # ══════════════════════════════════════════════════════
 model = RandomForestClassifier(
-    n_estimators=200,       # عدد الأشجار
-    max_depth=10,           # عمق الشجرة
-    min_samples_split=5,
-    min_samples_leaf=2,
-    class_weight='balanced', # يعالج class imbalance (728 vs 326)
+    n_estimators=100,
+    max_depth=5,           
+    min_samples_split=10,  
+    min_samples_leaf=5,    
+    max_features='sqrt',  
+    class_weight='balanced',
     random_state=42,
     n_jobs=-1
 )
@@ -134,8 +135,8 @@ meta = {
     'feature_importance': fi.round(4).to_dict()
 }
 
-with open('model_meta.json', 'w', ensure_ascii=False) as f:
-    json.dump(meta, f, indent=2)
+with open('model_meta.json', 'w', encoding='utf-8') as f:
+    json.dump(meta, f, indent=2, ensure_ascii=False)
 
 print("\n✓ تم حفظ الموديل:    rf_model.pkl")
 print("✓ تم حفظ المعلومات: model_meta.json")
