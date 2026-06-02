@@ -548,10 +548,14 @@ function setLanguage(lang) {
       }
     }
   });
+  
   document.querySelectorAll('select option').forEach(opt => {
     const key = opt.getAttribute('data-i18n');
     if (key && translations[lang]?.[key]) opt.textContent = translations[lang][key];
   });
+
+  document.getElementById('searchChild').placeholder =
+  translations[lang].search_placeholder;
 
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
   if (user.name) {
