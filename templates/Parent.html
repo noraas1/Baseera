@@ -203,7 +203,7 @@ tr:hover td{background:rgba(128,128,128,0.02)}
 .result-icon-wrap.safe{background:var(--accent-dim);color:var(--teal-400);border:2px solid var(--border-accent);box-shadow:var(--glow);}
 .result-title{font-size:24px;font-weight:900;margin-bottom:8px;color:var(--text);}
 .result-sub{font-size:15px;color:var(--text-2)}
-.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:2rem 0}
+.result-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:2rem 0}
 .rs-card{background:var(--surface2);border:1px solid var(--border-md);border-radius:var(--radius);padding:14px;text-align:center}
 .rs-val{font-size:24px;font-weight:900;color:var(--text);font-family:var(--font-mono)}
 .rs-lbl{font-size:12px;color:var(--text-3);margin-top:6px;font-weight:700;}
@@ -379,7 +379,6 @@ tr:hover td{background:rgba(128,128,128,0.02)}
       <p class="result-sub" id="rSub"></p>
 
       <div class="result-stats">
-        <div class="rs-card"><div class="rs-val" id="rScore">—</div><div class="rs-lbl" data-i18n="score_label">المجموع / 10</div></div>
         <div class="rs-card"><div class="rs-val" id="rConf">—</div><div class="rs-lbl" data-i18n="confidence_label">ثقة الموديل</div></div>
         <div class="rs-card"><div class="rs-val" id="rLevel">—</div><div class="rs-lbl" data-i18n="risk_level_label">مستوى الخطر</div></div>
       </div>
@@ -783,7 +782,6 @@ function showResult(data) {
   let subKey = isRisk ? 'result_high_sub' : 'result_safe_sub';
   document.getElementById('rTitle').textContent = T[currentLang][titleKey] || '';
   document.getElementById('rSub').textContent = T[currentLang][subKey] || '';
-  document.getElementById('rScore').textContent = `${data.total_score} / ${data.max_score}`;
   document.getElementById('rConf').textContent = `${Math.round(data.confidence * 100)}%`;
   document.getElementById('rLevel').textContent = { high: T[currentLang].risk_high, medium: T[currentLang].risk_medium, low: T[currentLang].risk_low }[lvl] || '—';
   const docSection = document.getElementById('doctorSection');
