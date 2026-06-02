@@ -235,18 +235,18 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(29
         نظام متكامل يستخدم نموذج Random Forest المدرّب على بيانات حقيقية للكشف المبكر عن مؤشرات طيف التوحد لدى الأطفال. يدعم الأهل والأطباء المختصين باتخاذ قرارات مبنية على البيانات.
       </p>
       
-      <div class="stat-row">
+     <div class="stat-row">
         <div class="stat-item">
-          <div class="stat-num">1054</div>
-          <div class="stat-lbl" data-i18n="stat1">حالة مدرّبة</div>
+          <div class="stat-num">95%</div>
+          <div class="stat-lbl" data-i18n="stat_acc">دقة التصنيف</div>
         </div>
         <div class="stat-item">
-          <div class="stat-num">96.7%</div>
-          <div class="stat-lbl" data-i18n="stat2">دقة التصنيف</div>
+          <div class="stat-num">+1000</div>
+          <div class="stat-lbl" data-i18n="stat_cases">حالة مدروسة</div>
         </div>
         <div class="stat-item">
-          <div class="stat-num">99.5%</div>
-          <div class="stat-lbl" data-i18n="stat3">ROC-AUC</div>
+          <div class="stat-num">10</div>
+          <div class="stat-lbl" data-i18n="stat_q">أسئلة سريعة</div>
         </div>
       </div>
     </div>
@@ -436,6 +436,8 @@ const translations = {
     no_account:"ليس لديك حساب؟",signup_link:"سجل الآن",
     hero_desc:"نظام متكامل يستخدم نموذج Random Forest المدرّب على بيانات حقيقية للكشف المبكر عن مؤشرات طيف التوحد لدى الأطفال. يدعم الأهل والأطباء المختصين باتخاذ قرارات مبنية على البيانات.",
     specialty_placeholder:"طب الأعصاب، علم النفس...",
+    badge_accuracy:"95% دقة",
+    stat_acc:"دقة التصنيف", stat_cases:"حالة مدروسة", stat_q:"أسئلة سريعة",
     fullname_placeholder:"أحمد محمد"
 
 
@@ -457,6 +459,8 @@ const translations = {
     no_account:"Don't have an account?",signup_link:"Sign Up",
     hero_desc:"An integrated system that uses a Random Forest model trained on real-world data for the early detection of Autism Spectrum Disorder indicators in children. It supports parents and healthcare specialists in making data-driven decisions.",
     specialty_placeholder:"Neurology, Psychology...",
+    badge_accuracy:"95% Accuracy",
+    stat_acc:"Classification Accuracy", stat_cases:"Trained Cases", stat_q:"Quick Questions",
     fullname_placeholder:"John Smith"
 
   }
