@@ -779,11 +779,11 @@ function showResult(data) {
   const iconClass = riskPct >= 70 ? 'risk' : riskPct >= 40 ? 'medium' : 'safe';
   document.getElementById('rIcon').className = `result-icon-wrap ${iconClass}`;
   document.getElementById('rIcon').textContent = `${riskPct}%`;
-  let titleKey;
-  if (!isRisk && lvl === 'low')    titleKey = 'result_safe_title';
-  else if (!isRisk && lvl === 'medium') titleKey = 'result_medium_title';
-  else if (isRisk)                      titleKey = 'result_high_title';
-  else                                  titleKey = 'result_safe_title';  let subKey = isRisk ? 'result_high_sub' : 'result_safe_sub';
+let titleKey;
+if (!isRisk && lvl === 'low')    titleKey = 'result_safe_title';
+else if (!isRisk && lvl === 'medium') titleKey = 'result_medium_title';
+else if (isRisk)                      titleKey = 'result_high_title';
+else                                  titleKey = 'result_safe_title';  let subKey = isRisk ? 'result_high_sub' : 'result_safe_sub';
   document.getElementById('rTitle').textContent = T[currentLang][titleKey] || '';
   document.getElementById('rSub').textContent = T[currentLang][subKey] || '';
   document.getElementById('rLevel').textContent = { high: T[currentLang].risk_high, medium: T[currentLang].risk_medium, low: T[currentLang].risk_low }[lvl] || '—';
