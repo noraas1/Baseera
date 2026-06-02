@@ -114,7 +114,7 @@ body:not(.light-mode) .nav-brand img {
 .btn-teal-soft{background:var(--accent-dim);color:var(--teal-400);border:0.5px solid rgba(29,158,117,0.25);}
 .btn-teal-soft:hover{background:rgba(29,158,117,0.2)}
 
-/* ── Forms ── */
+
 /* ── Forms ── */
 .form-group{margin-bottom:1rem;text-align:start;}
 input,select{width:100%;padding:12px 16px;border:1px solid var(--border-md);border-radius:var(--radius);font-family:var(--font);font-size:14px;color:var(--text);background:var(--surface2);outline:none;transition:all .2s;}
@@ -122,7 +122,7 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(29
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
 /* ── Metrics & Tables ── */
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid-3{display:grid;grid-template-columns:1fr;gap:14px}
 .metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;text-align:center;transition:all .2s;position:relative;overflow:hidden;box-shadow:var(--shadow);}
 .metric:hover{border-color:var(--border-md);transform:translateY(-2px)}
 .metric-val{font-size:32px;font-weight:900;line-height:1;font-family:var(--font-mono)}
@@ -770,22 +770,25 @@ async function submitAssessment() {
   }
 }
 
+
 function showResult(data) {
   resultData = data;
   setStep(4);
   const isRisk = data.result === 'at_risk', lvl = data.risk_level;
-  const riskPct = Math.round((data.total_score / data.max_score) * 100);
+  const riskPct = Math.round(data.at_risk_probability * 100);
   const iconClass = riskPct >= 70 ? 'risk' : riskPct >= 40 ? 'medium' : 'safe';
   document.getElementById('rIcon').className = `result-icon-wrap ${iconClass}`;
   document.getElementById('rIcon').textContent = `${riskPct}%`;
-  let titleKey = isRisk ? (lvl === 'high' ? 'result_high_title' : 'result_medium_title') : 'result_safe_title';
-  let subKey = isRisk ? 'result_high_sub' : 'result_safe_sub';
+  let titleKey;
+  if (!isRisk && lvl === 'low')    titleKey = 'result_safe_title';
+  else if (!isRisk && lvl === 'medium') titleKey = 'result_medium_title';
+  else if (isRisk)                      titleKey = 'result_high_title';
+  else                                  titleKey = 'result_safe_title';  let subKey = isRisk ? 'result_high_sub' : 'result_safe_sub';
   document.getElementById('rTitle').textContent = T[currentLang][titleKey] || '';
   document.getElementById('rSub').textContent = T[currentLang][subKey] || '';
-  document.getElementById('rConf').textContent = `${Math.round(data.confidence * 100)}%`;
   document.getElementById('rLevel').textContent = { high: T[currentLang].risk_high, medium: T[currentLang].risk_medium, low: T[currentLang].risk_low }[lvl] || '—';
   const docSection = document.getElementById('doctorSection');
-  if (isRisk) { docSection.classList.remove('hidden'); renderDoctors(); } else { docSection.classList.add('hidden'); }
+  if (lvl === 'medium' || lvl === 'high') { docSection.classList.remove('hidden'); renderDoctors(); } else { docSection.classList.add('hidden'); }
   const newEntry = {
     id: data.screening_id || null, child: childInfo.child_name, age: childInfo.child_age_months,
     gender: childInfo.child_gender, result: data.result, risk: data.risk_level,
