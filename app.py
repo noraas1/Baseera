@@ -221,7 +221,12 @@ def predict():
     prob       = model.predict_proba(X)[0]
     result     = 'at_risk' if pred == 1 else 'not_at_risk'
     confidence = round(float(prob[pred]), 4)
-    risk_level = get_risk_level(q_score)
+        if float(prob[1]) >= 0.70:
+        risk_level = 'high'
+    elif float(prob[1]) >= 0.40:
+        risk_level = 'medium'
+    else:
+        risk_level = 'low'
 
     log.info("=" * 55)
     log.info("[PREDICT] الطفل: %s | العمر: %d شهر", body['child_name'], age_mons)
