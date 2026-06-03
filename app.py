@@ -182,9 +182,7 @@ def test_model():
         return jsonify({'error': str(e)}), 400
 
 
-# ══════════════════════════════════════════════════════
-# ROUTE 3 — التنبؤ الرئيسي
-# ══════════════════════════════════════════════════════
+# @app.route('/api/predict', methods=['POST'])
 @app.route('/api/predict', methods=['POST'])
 def predict():
     body = request.get_json()
@@ -194,6 +192,7 @@ def predict():
     required = ['user_name', 'user_email', 'child_name',
                 'child_age_months', 'child_gender', 'answers',
                 'jaundice', 'family_asd']
+
     missing = [f for f in required if f not in body]
     if missing:
         return jsonify({'error': f'حقول مفقودة: {missing}'}), 400
@@ -209,42 +208,33 @@ def predict():
 
     q_score = sum(answers)
     sex_enc      = 1 if body.get('child_gender') == 'male' else 0
-    jaundice_enc = 1 if body.get('jaundice')     == 'yes'  else 0
-    family_enc   = 1 if body.get('family_asd')   == 'yes'  else 0
+    jaundice_enc = 1 if body.get('jaundice') == 'yes' else 0
+    family_enc   = 1 if body.get('family_asd') == 'yes' else 0
     age_mons     = int(body.get('child_age_months', 24))
 
-    # ── الموديل
     feature_vector = answers + [age_mons, sex_enc, jaundice_enc, family_enc]
     X = np.array(feature_vector).reshape(1, -1)
 
-    pred       = model.predict(X)[0]
-    prob       = model.predict_proba(X)[0]
-    result     = 'at_risk' if pred == 1 else 'not_at_risk'
+    pred = model.predict(X)[0]
+    prob = model.predict_proba(X)[0]
+
+    result = 'at_risk' if pred == 1 else 'not_at_risk'
     confidence = round(float(prob[pred]), 4)
 
-if float(prob[1]) >= 0.70:
-    risk_level = 'high'
-elif float(prob[1]) >= 0.40:
-    risk_level = 'medium'
-else:
-    risk_level = 'low'
+    if float(prob[1]) >= 0.70:
+        risk_level = 'high'
+    elif float(prob[1]) >= 0.40:
+        risk_level = 'medium'
+    else:
+        risk_level = 'low'
 
-    log.info("=" * 55)
-    log.info("[PREDICT] الطفل: %s | العمر: %d شهر", body['child_name'], age_mons)
-    log.info("[PREDICT] الإجابات الخام:   %s", answers_raw)
-    log.info("[PREDICT] بعد التحويل:     %s", answers)
-    log.info("[PREDICT] Feature vector:  %s", feature_vector)
-    log.info("[PREDICT] الموديل يقول:    pred=%d | proba=%s", int(pred), prob.round(4).tolist())
-    log.info("[PREDICT] النتيجة النهائية: %s | ثقة: %.2f%% | خطر: %s", result, confidence * 100, risk_level)
-    log.info("=" * 55)
-    ...
-    
-    # ── Supabase
+    log.info("Child: %s | Age: %d", body['child_name'], age_mons)
+
     sc_id = None
     db_saved = False
 
-    if supabase:
-        try:
+    try:
+        if supabase:
             user_id = get_or_create_user_id(body['user_name'], body['user_email'])
 
             q_vals = {f'q{i+1}': answers[i] for i in range(10)}
@@ -262,7 +252,7 @@ else:
                 **q_vals
             }).execute()
 
-            if sc.data and len(sc.data) > 0:
+            if sc.data:
                 sc_id = sc.data[0].get('id')
 
             supabase.table('predictions').insert({
@@ -274,12 +264,13 @@ else:
 
             db_saved = True
 
-        except Exception as e:
-         log.error(e)
-         db_saved = False
+    except Exception as e:
+        log.error(e)
+        db_saved = False
 
+    risk_prob = float(prob[1]) if prob is not None and len(prob) > 1 else 0.0
 
-return jsonify({
+    return jsonify({
         'source': 'random_forest_model',
         'model_type': type(model).__name__,
         'screening_id': sc_id,
@@ -287,12 +278,11 @@ return jsonify({
         'result': result,
         'risk_level': risk_level,
         'confidence': confidence,
-        'at_risk_probability':  round(float(prob[1]), 4),  
+        'at_risk_probability': round(risk_prob, 4),
         'total_score': q_score,
         'max_score': 10,
         'feature_vector': feature_vector
-})
-
+    })
 # ══════════════════════════════════════════════════════
 # ROUTE — التسجيل
 # ══════════════════════════════════════════════════════
