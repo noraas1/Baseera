@@ -221,12 +221,13 @@ def predict():
     prob       = model.predict_proba(X)[0]
     result     = 'at_risk' if pred == 1 else 'not_at_risk'
     confidence = round(float(prob[pred]), 4)
-        if float(prob[1]) >= 0.70:
-        risk_level = 'high'
-    elif float(prob[1]) >= 0.40:
-        risk_level = 'medium'
-    else:
-        risk_level = 'low'
+
+if float(prob[1]) >= 0.70:
+    risk_level = 'high'
+elif float(prob[1]) >= 0.40:
+    risk_level = 'medium'
+else:
+    risk_level = 'low'
 
     log.info("=" * 55)
     log.info("[PREDICT] الطفل: %s | العمر: %d شهر", body['child_name'], age_mons)
@@ -274,10 +275,11 @@ def predict():
             db_saved = True
 
         except Exception as e:
-            log.error(e)
-            db_saved = False
+         log.error(e)
+         db_saved = False
 
-    return jsonify({
+
+return jsonify({
         'source': 'random_forest_model',
         'model_type': type(model).__name__,
         'screening_id': sc_id,
@@ -289,8 +291,7 @@ def predict():
         'total_score': q_score,
         'max_score': 10,
         'feature_vector': feature_vector
-    })
-
+})
 
 # ══════════════════════════════════════════════════════
 # ROUTE — التسجيل
@@ -302,7 +303,7 @@ def register():
     if not data:
         return jsonify({'error': 'الطلب فارغ'}), 400
 
-    name      = data.get('name', '').strip()
+    name      =  data.get('name', '').strip()
     email     = data.get('email', '').strip().lower()
     password  = data.get('password', '')
     role      = data.get('role', '')
