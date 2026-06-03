@@ -776,6 +776,7 @@ function renderModel() {
 // ── Debug (from File 5)
 // ══════════════════════════════════════════════════════
 function debugScreenings() {
+    console.log("showResult data =", data);
   if (!screenings.length) { showToast('لا توجد بيانات بعد'); return; }
   const s = screenings[0];
   console.group('[DEBUG] أول screening record');
