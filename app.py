@@ -280,6 +280,7 @@ def predict():
         'result': result,
         'risk_level': risk_level,
         'confidence': confidence,
+        'at_risk_probability':  round(float(prob[1]), 4),  
         'total_score': q_score,
         'max_score': 10,
         'feature_vector': feature_vector
