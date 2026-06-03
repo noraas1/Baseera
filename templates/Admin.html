@@ -731,9 +731,7 @@ function renderScreenings() {
         <td><div class="td-name">${s.child_name || '—'}</div></td>
         <td style="font-size:13px;color:var(--text-2);font-weight:600">${s.user_name || s.user_email || '—'}</td>
         <td style="font-size:13px;font-family:var(--font-mono)">${s.child_age_months ?? '—'} ${t('months')}</td>
-        <td>${resultBadge}</td>
         <td>${riskBadge}</td>
-        <td style="font-size:13px;font-weight:700;font-family:var(--font-mono)">${conf || '—'}</td>
         <td style="font-size:13px;color:var(--text-2)">${s.assigned_doctor_name || '—'}</td>
         <td style="font-size:12px;color:var(--text-3)">${fmtDate(s.created_at)}</td>
       </tr>`;
