@@ -366,15 +366,7 @@ html[dir="ltr"] .toast { left: 50%; right: auto; }
       <div class="detail-row"><span class="detail-label" data-i18n="detail_family">تاريخ عائلي بالتوحد</span><span class="detail-val" id="dFamily">—</span></div>
     </div>
 
-    <div style="display:flex;gap:12px;margin-bottom:1.5rem;flex-wrap:wrap">
-      <div style="flex:1;background:var(--surface2);border:1px solid var(--border-md);border-radius:var(--radius-lg);padding:14px;text-align:center">
-        <div style="font-size:24px;font-weight:900;font-family:var(--font-mono);color:var(--text)" id="dScore">—</div>
-        <div style="font-size:12px;font-weight:700;color:var(--text-3);margin-top:4px" data-i18n="score_label">المجموع / 10</div>
-      </div>
-      <div style="flex:1;background:var(--surface2);border:1px solid var(--border-md);border-radius:var(--radius-lg);padding:14px;text-align:center">
-        <div style="font-size:24px;font-weight:900;font-family:var(--font-mono);color:var(--text)" id="dConf">—</div>
-        <div style="font-size:12px;font-weight:700;color:var(--text-3);margin-top:4px" data-i18n="confidence_label">ثقة الموديل</div>
-      </div>
+ 
       <div style="flex:1;background:var(--surface2);border:1px solid var(--border-md);border-radius:var(--radius-lg);padding:14px;text-align:center">
         <div style="font-size:20px;font-weight:900;color:var(--text)" id="dRisk">—</div>
         <div style="font-size:12px;font-weight:700;color:var(--text-3);margin-top:4px" data-i18n="risk_label">مستوى الخطر</div>
@@ -658,9 +650,7 @@ function openDetail(id) {
   document.getElementById('dJaundice').textContent  = c.jaundice === 'yes' ? translations[currentLang].yes : translations[currentLang].no;
   document.getElementById('dFamily').textContent    = c.family === 'yes'   ? translations[currentLang].yes : translations[currentLang].no;
 
-  // الأرقام بـ dir=ltr حتى لا تنعكس (5 / 10 وليس 10 / 5)
-  document.getElementById('dScore').innerHTML = `<span dir="ltr">${c.score} / 10</span>`;
-  document.getElementById('dConf').textContent  = `${Math.round(c.conf * 100)}%`;
+
   document.getElementById('dRisk').textContent  = translations[currentLang][`risk_${c.risk}`] || c.risk;
 
   // رسم الإجابات بناءً على 1 (خطر) أو 0 (طبيعي)
