@@ -771,32 +771,188 @@ async function submitAssessment() {
 }
 
 
-function showResult(data) {
-  resultData = data;
-  setStep(4);
-  const isRisk = data.result === 'at_risk', lvl = data.risk_level;
-  const riskPct = Math.round(data.at_risk_probability * 100);
-  const iconClass = riskPct >= 70 ? 'risk' : riskPct >= 40 ? 'medium' : 'safe';
-  document.getElementById('rIcon').className = `result-icon-wrap ${iconClass}`;
-  document.getElementById('rIcon').textContent = `${riskPct}%`;
-let titleKey;
-if (!isRisk && lvl === 'low')    titleKey = 'result_safe_title';
-else if (!isRisk && lvl === 'medium') titleKey = 'result_medium_title';
-else if (isRisk)                      titleKey = 'result_high_title';
-else                                  titleKey = 'result_safe_title';  let subKey = isRisk ? 'result_high_sub' : 'result_safe_sub';
-  document.getElementById('rTitle').textContent = T[currentLang][titleKey] || '';
-  document.getElementById('rSub').textContent = T[currentLang][subKey] || '';
-  document.getElementById('rLevel').textContent = { high: T[currentLang].risk_high, medium: T[currentLang].risk_medium, low: T[currentLang].risk_low }[lvl] || '—';
-  const docSection = document.getElementById('doctorSection');
-  if (lvl === 'medium' || lvl === 'high') { docSection.classList.remove('hidden'); renderDoctors(); } else { docSection.classList.add('hidden'); }
-  const newEntry = {
-    id: data.screening_id || null, child: childInfo.child_name, age: childInfo.child_age_months,
-    gender: childInfo.child_gender, result: data.result, risk: data.risk_level,
-    conf: data.confidence, doctor: '—', date: new Date().toISOString().split('T')[0], fromDB: !!data.screening_id
-  };
-  if (newEntry.id) childrenHistory = childrenHistory.filter(h => h.id !== newEntry.id);
-  childrenHistory.unshift(newEntry);
-  saveHistoryLocal(); renderDashboard();
+async function showReportPDF(screeningId) {
+  try {
+    const res = await fetch(`${API_BASE}/api/screening/${screeningId}`);
+    if (!res.ok) throw new Error('فشل جلب البيانات');
+    const data = await res.json();
+    const isEnglish = currentLang === 'en';
+    const dir = isEnglish ? 'ltr' : 'rtl';
+
+    const questionsTexts = isEnglish ? [
+      "Does the child respond when called by name?",
+      "Does the child make eye contact with others?",
+      "Does the child point to indicate something he wants?",
+      "Does the child share interest in something with others?",
+      "Does the child imitate what others do?",
+      "Does the child make sounds or words to communicate?",
+      "Does the child smile back at your smile?",
+      "Does the child show interest in other children?",
+      "Does the child play pretend or imaginative games?",
+      "Does the child understand and follow simple instructions?"
+    ] : [
+      "هل يستجيب الطفل عند مناداته باسمه؟",
+      "هل يتواصل الطفل بالعين مع الآخرين؟",
+      "هل يشير بإصبعه للإشارة إلى شيء يريده؟",
+      "هل يتقاسم الاهتمام بشيء مع الآخرين؟",
+      "هل يقلّد ما يفعله الآخرون؟",
+      "هل يُصدر أصواتًا أو كلمات للتواصل؟",
+      "هل يبتسم ردًا على ابتسامتك؟",
+      "هل يُبدي اهتمامًا بالأطفال الآخرين؟",
+      "هل يلعب ألعابًا تخيلية أو تمثيلية؟",
+      "هل يفهم وينفّذ التعليمات البسيطة؟"
+    ];
+
+    // ── جلب الإجابة من أي مصدر ممكن ──
+    function getRaw(i) {
+      if (data[`q${i}`] !== undefined && data[`q${i}`] !== null && data[`q${i}`] !== '') return data[`q${i}`];
+      if (Array.isArray(data.answers) && data.answers[i-1] !== undefined) return data.answers[i-1];
+      if (data.answers && typeof data.answers === 'object') return data.answers[i];
+      return null;
+    }
+
+    // ── تحويل القيمة: 1 = خطر، 0 = طبيعي ──
+    function parseAnswer(raw) {
+      const s = String(raw ?? '').trim().toLowerCase();
+      if (s === '1' || s === 'never')     return 'risk';
+      if (s === '0' || s === 'always')    return 'normal';
+      if (s === '2' || s === 'sometimes') return 'risk'; // أحيانًا = مؤشر خطر
+      return 'normal';
+    }
+
+    let answersHtml = '';
+    for (let i = 1; i <= 10; i++) {
+      const raw    = getRaw(i);
+      const type   = parseAnswer(raw);
+      const isRisk = type === 'risk';
+
+      const emoji = isRisk ? '❌' : '✅';
+      const label = isRisk
+        ? (isEnglish ? 'Risk Indicator' : 'مؤشر خطر')
+        : (isEnglish ? 'Normal'         : 'طبيعي');
+      const bg     = isRisk ? '#fef2f2' : '#f0fdf4';
+      const color  = isRisk ? '#b91c1c' : '#15803d';
+      const border = isRisk ? '#fca5a5' : '#86efac';
+
+      answersHtml += `
+        <div style="margin-bottom:10px;padding:14px 18px;border-radius:12px;
+                    background:${bg};border:1px solid ${border};
+                    display:flex;align-items:center;gap:14px;direction:${dir}">
+          <div style="min-width:28px;height:28px;border-radius:50%;background:#0f766e;
+                      color:#fff;font-weight:800;font-size:13px;display:flex;
+                      align-items:center;justify-content:center;flex-shrink:0;">${i}</div>
+          <div style="flex:1;font-weight:700;color:#1e293b;font-size:13px;">
+            ${questionsTexts[i-1]}
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+            <span style="font-size:18px;">${emoji}</span>
+            <span style="font-weight:800;color:${color};font-size:13px;">${label}</span>
+          </div>
+        </div>`;
+    }
+
+    const pred     = data.prediction || {};
+    const isAtRisk = pred.result === 'at_risk';
+    const riskLevel = {
+      high:   isEnglish ? 'High'   : 'عالي',
+      medium: isEnglish ? 'Medium' : 'متوسط',
+      low:    isEnglish ? 'Low'    : 'منخفض'
+    }[pred.risk_level] || '—';
+
+    const resultBig = isAtRisk
+      ? { label: isEnglish ? '⚠️ AT RISK' : '⚠️ خطر',
+          bg: '#fef2f2', color: '#b91c1c', border: '#fca5a5' }
+      : { label: isEnglish ? '✅ NOT AT RISK' : '✅ آمن',
+          bg: '#f0fdf4', color: '#15803d', border: '#86efac' };
+
+    const riskPct = Math.round((pred.at_risk_probability ?? (isAtRisk ? 0.8 : 0.2)) * 100);
+
+    const htmlContent = `
+      <div style="font-family:Arial,sans-serif;padding:32px;direction:${dir};
+                  color:#111827;max-width:700px;margin:auto;">
+
+        <!-- Header -->
+        <div style="text-align:center;margin-bottom:28px">
+          <h1 style="color:#0f766e;margin-bottom:6px;font-size:24px;">
+            ${isEnglish ? 'Autism Screening Report' : 'تقرير فحص التوحد المبكر'}
+          </h1>
+          <div style="width:60px;height:4px;background:#14b8a6;margin:auto;border-radius:20px;"></div>
+          <div style="margin-top:10px;font-size:12px;color:#6b7280;">
+            ${isEnglish ? 'Baseera Platform' : 'منصة بصيرة'} • ${new Date().toLocaleDateString(isEnglish ? 'en-GB' : 'ar-SA')}
+          </div>
+        </div>
+
+        <!-- بطاقة النتيجة الكبيرة -->
+        <div style="text-align:center;padding:24px;border-radius:16px;
+                    background:${resultBig.bg};border:2px solid ${resultBig.border};
+                    margin-bottom:24px;">
+          <div style="font-size:28px;font-weight:900;color:${resultBig.color};margin-bottom:10px;">
+            ${resultBig.label}
+          </div>
+<div style="font-size:14px;color:${resultBig.color};opacity:0.85;margin-bottom:12px;">
+            ${isEnglish
+              ? `Risk Level: <strong>${riskLevel}</strong>`
+              : `مستوى الخطر: <strong>${riskLevel}</strong>`}
+          </div>
+          <div style="display:inline-block;padding:7px 20px;border-radius:100px;
+                      background:${resultBig.color};color:#fff;font-size:14px;font-weight:800;">
+            ${isEnglish ? `Risk Probability: ${riskPct}%` : `احتمالية الخطر: ${riskPct}%`}
+          </div>
+        </div>
+
+        <!-- معلومات الطفل -->
+        <div style="background:#f8fafc;border-radius:14px;padding:18px;
+                    margin-bottom:20px;border:1px solid #e5e7eb;">
+          <h2 style="margin-bottom:14px;color:#0f172a;font-size:16px;">
+            ${isEnglish ? '👶 Child Information' : '👶 معلومات الطفل'}
+          </h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div>
+              <div style="color:#6b7280;font-size:12px;">${isEnglish ? 'Name' : 'الاسم'}</div>
+              <div style="font-weight:800;font-size:15px;">${data.child_name}</div>
+            </div>
+            <div>
+              <div style="color:#6b7280;font-size:12px;">${isEnglish ? 'Age' : 'العمر'}</div>
+              <div style="font-weight:800;font-size:15px;">${data.child_age_months} ${isEnglish ? 'months' : 'شهر'}</div>
+            </div>
+            <div>
+              <div style="color:#6b7280;font-size:12px;">${isEnglish ? 'Gender' : 'الجنس'}</div>
+              <div style="font-weight:800;font-size:15px;">${data.child_gender === 'male' ? (isEnglish ? 'Male' : 'ذكر') : (isEnglish ? 'Female' : 'أنثى')}</div>
+            </div>
+            <div>
+              <div style="color:#6b7280;font-size:12px;">${isEnglish ? 'Date' : 'تاريخ الفحص'}</div>
+              <div style="font-weight:800;font-size:15px;">${(data.created_at || '').slice(0,10) || '—'}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- الأسئلة والإجابات -->
+        <div style="background:#fff;border-radius:14px;padding:20px;
+                    border:1px solid #e5e7eb;margin-bottom:20px;">
+          <h2 style="margin-bottom:16px;color:#0f172a;font-size:16px;">
+            ${isEnglish ? '📋 Questions & Answers' : '📋 الأسئلة والإجابات'}
+          </h2>
+          ${answersHtml}
+        </div>
+
+        <!-- تنبيه -->
+        <div style="padding:14px 18px;border-radius:12px;background:#fff7ed;
+                    border:1px solid #fed7aa;color:#9a3412;font-size:12px;line-height:1.8;">
+          ⚠️ ${isEnglish
+            ? 'This report is an early screening support tool only and is not a final medical diagnosis.'
+            : 'هذا التقرير أداة مساعدة للفحص المبكر فقط وليس تشخيصًا طبيًا نهائيًا. يُرجى مراجعة طبيب متخصص.'}
+        </div>
+      </div>`;
+
+    html2pdf().set({
+      margin: 0.4,
+      filename: `تقرير_${data.child_name}_${(data.created_at || '').slice(0,10) || 'تاريخ'}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    }).from(htmlContent).save();
+
+  } catch(err) { console.error(err); alert(err.message); }
 }
 
 // ══════════════════════════════════════════════════════
