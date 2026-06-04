@@ -441,7 +441,7 @@ def accept_case():
 # ══════════════════════════════════════════════════════
 # ROUTE — سجل ولي الأمر
 # ══════════════════════════════════════════════════════
-@app.route('/api/history/<email>')
+@app.route('/api/history/<path:email>')
 def history(email):
     if not supabase:
         return jsonify([])
