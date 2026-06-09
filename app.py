@@ -236,7 +236,20 @@ def predict():
     try:
         if supabase:
             user_id = get_or_create_user_id(body['user_name'], body['user_email'])
-
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
             q_vals = {f'q{i+1}': answers[i] for i in range(10)}
 
             sc = supabase.table('screenings').insert({
@@ -261,7 +274,21 @@ def predict():
                 'risk_level': risk_level,
                 'confidence': confidence,
             }).execute()
-
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
+#***
             db_saved = True
 
     except Exception as e:
